@@ -257,6 +257,8 @@ body {
 /* Iframe wrapper for transform scaling */
 .iframe-wrapper {
   flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 4px;
 }
 
 .iframe-wrapper .canvas-iframe {

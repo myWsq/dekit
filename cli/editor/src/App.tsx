@@ -93,12 +93,11 @@ export function App() {
   );
 
   const handleRotate = useCallback(() => {
-    setDeviceWidth((prev) => {
-      const oldHeight = deviceHeight;
-      setDeviceHeight(prev);
-      return oldHeight;
-    });
-  }, [deviceHeight]);
+    const w = deviceWidth;
+    const h = deviceHeight;
+    setDeviceWidth(h);
+    setDeviceHeight(w);
+  }, [deviceWidth, deviceHeight]);
 
   // Calculate scale and iframe dimensions
   const isDeviceActive = deviceWidth > 0 && deviceHeight > 0;
@@ -209,7 +208,13 @@ export function App() {
                 className="canvas-iframe"
                 src={iframeSrc}
                 onLoad={handleIframeLoad}
-                style={{ width: "100%", height: "100%", border: "1px solid #3c3c3c" }}
+                style={{
+                  position: "absolute",
+                  inset: "24px",
+                  width: "calc(100% - 48px)",
+                  height: "calc(100% - 48px)",
+                  border: "1px solid #3c3c3c",
+                }}
               />
             )
           ) : (

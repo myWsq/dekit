@@ -282,9 +282,17 @@ function DeviceToolbar({
   const isPreset = !!currentPreset;
   const dpr = currentPreset?.dpr ?? 1;
 
+  let selectLabel = "Responsive";
+  if (currentPreset) {
+    selectLabel = `${currentPreset.name} — ${currentPreset.width}×${currentPreset.height}`;
+  } else if (deviceMode === "custom") {
+    selectLabel = "Custom";
+  }
+
   return (
     <div className="device-toolbar">
       <select
+        style={{ width: selectLabel.length + 3 + "ch" }}
         value={
           deviceMode === "responsive"
             ? "responsive"

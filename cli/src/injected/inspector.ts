@@ -76,11 +76,10 @@ export function generateInspectorScript(): string {
     const cx1 = ml + rect.width - br - pr, cy1 = mt + rect.height - bb - pb;
 
     function ring(ox0, oy0, ox1, oy1, ix0, iy0, ix1, iy1) {
-      // Outer clockwise, inner counter-clockwise (starting at BL)
-      // so connecting edges stay on the left side and don't cross
-      return 'polygon(evenodd, ' +
-        ox0+'px '+oy0+'px,'+ox1+'px '+oy0+'px,'+ox1+'px '+oy1+'px,'+ox0+'px '+oy1+'px,' +
-        ix0+'px '+iy1+'px,'+ix1+'px '+iy1+'px,'+ix1+'px '+iy0+'px,'+ix0+'px '+iy0+'px)';
+      // Two separate closed subpaths via SVG path syntax — no connecting edges
+      return "path(evenodd, '" +
+        'M '+ox0+' '+oy0+' L '+ox1+' '+oy0+' L '+ox1+' '+oy1+' L '+ox0+' '+oy1+' Z ' +
+        'M '+ix0+' '+iy0+' L '+ix1+' '+iy0+' L '+ix1+' '+iy1+' L '+ix0+' '+iy1+" Z')";
     }
 
     // Each ring layer fills the container; clip-path cuts it to only show its ring

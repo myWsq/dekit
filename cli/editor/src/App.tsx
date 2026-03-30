@@ -279,6 +279,7 @@ function DeviceToolbar({
   onTouchCursorToggle: () => void;
 }) {
   const currentPreset = DEVICE_PRESETS.find((d) => d.name === deviceMode);
+  const isPreset = !!currentPreset;
   const dpr = currentPreset?.dpr ?? 1;
 
   return (
@@ -324,12 +325,11 @@ function DeviceToolbar({
         min={0}
         value={deviceWidth || ""}
         placeholder="W"
+        disabled={isPreset}
+        style={{ width: Math.max(3, String(deviceWidth || "").length) + 1 + "ch" }}
         onChange={(e) => {
           const w = parseInt(e.target.value) || 0;
           onWidthChange(w);
-          if (deviceMode !== "responsive" && deviceMode !== "custom") {
-            onDeviceChange("custom");
-          }
         }}
       />
       <span className="dim-separator">×</span>
@@ -339,12 +339,11 @@ function DeviceToolbar({
         min={0}
         value={deviceHeight || ""}
         placeholder="H"
+        disabled={isPreset}
+        style={{ width: Math.max(3, String(deviceHeight || "").length) + 1 + "ch" }}
         onChange={(e) => {
           const h = parseInt(e.target.value) || 0;
           onHeightChange(h);
-          if (deviceMode !== "responsive" && deviceMode !== "custom") {
-            onDeviceChange("custom");
-          }
         }}
       />
 

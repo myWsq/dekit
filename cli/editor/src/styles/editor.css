@@ -197,7 +197,6 @@ body {
 }
 
 .device-toolbar .dim-input {
-  width: 48px;
   background: transparent;
   border: none;
   border-bottom: 1px solid transparent;
@@ -206,15 +205,28 @@ body {
   text-align: center;
   font-size: 12px;
   outline: none;
+  min-width: 3ch;
 }
 
-.device-toolbar .dim-input:hover {
+.device-toolbar .dim-input:hover:not(:disabled) {
   border-bottom-color: #666;
 }
 
-.device-toolbar .dim-input:focus {
+.device-toolbar .dim-input:focus:not(:disabled) {
   color: #ffffff;
   border-bottom-color: #2563eb;
+}
+
+.device-toolbar .dim-input:disabled {
+  color: #999;
+  cursor: default;
+  -moz-appearance: textfield;
+}
+
+.device-toolbar .dim-input::-webkit-inner-spin-button,
+.device-toolbar .dim-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .device-toolbar .dim-separator {

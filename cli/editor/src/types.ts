@@ -30,3 +30,10 @@ export type EditorMessage =
   | { type: "GET_DOM_TREE" }
   | { type: "HIGHLIGHT_NODE"; path: string }
   | { type: "CLEAR_HIGHLIGHT" };
+
+export interface DevicePreset {
+  name: string;
+  width: number;
+  height: number;
+  dpr: number;
+}

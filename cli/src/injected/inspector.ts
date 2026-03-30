@@ -250,6 +250,11 @@ export function generateInspectorScript(): string {
         const info = getNodeInfo(node);
         window.parent.postMessage({ type: 'NODE_SELECTED', node: info }, '*');
       }
+    } else if (msg.type === 'HOVER_NODE') {
+      const node = resolveNodeByPath(msg.path);
+      if (node) {
+        showOverlay(node);
+      }
     } else if (msg.type === 'CLEAR_HIGHLIGHT') {
       selectedNode = null;
       hideOverlay();

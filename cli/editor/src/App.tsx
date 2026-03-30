@@ -61,6 +61,21 @@ export function App() {
     setSelectedPath(path);
   }, []);
 
+  // Hover on layer tree node
+  const handleLayerHover = useCallback((path: string | null) => {
+    if (path) {
+      iframeRef.current?.contentWindow?.postMessage(
+        { type: "HOVER_NODE", path },
+        "*"
+      );
+    } else {
+      iframeRef.current?.contentWindow?.postMessage(
+        { type: "CLEAR_HIGHLIGHT" },
+        "*"
+      );
+    }
+  }, []);
+
   // Track canvas area size for auto-fit calculation
   useEffect(() => {
     const el = canvasAreaRef.current;
@@ -155,6 +170,7 @@ export function App() {
               depth={0}
               selectedPath={selectedPath}
               onSelect={handleLayerClick}
+              onHover={handleLayerHover}
             />
           ))}
         </div>
@@ -374,11 +390,13 @@ function LayerTreeNode({
   depth,
   selectedPath,
   onSelect,
+  onHover,
 }: {
   node: DOMTreeNode;
   depth: number;
   selectedPath: string;
   onSelect: (path: string) => void;
+  onHover: (path: string | null) => void;
 }) {
   return (
     <>
@@ -386,6 +404,8 @@ function LayerTreeNode({
         className={`layer-node ${node.path === selectedPath ? "selected" : ""}`}
         style={{ paddingLeft: 12 + depth * 16 }}
         onClick={() => onSelect(node.path)}
+        onMouseEnter={() => onHover(node.path)}
+        onMouseLeave={() => onHover(null)}
       >
         <span className="layer-tag">&lt;{node.tagName}&gt;</span>
         {node.className && (
@@ -399,6 +419,7 @@ function LayerTreeNode({
           depth={depth + 1}
           selectedPath={selectedPath}
           onSelect={onSelect}
+          onHover={onHover}
         />
       ))}
     </>

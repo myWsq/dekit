@@ -29,6 +29,7 @@ export type IframeMessage =
 export type EditorMessage =
   | { type: "GET_DOM_TREE" }
   | { type: "HIGHLIGHT_NODE"; path: string }
+  | { type: "HOVER_NODE"; path: string }
   | { type: "CLEAR_HIGHLIGHT" }
   | { type: "SET_TOUCH_CURSOR"; enabled: boolean };
 

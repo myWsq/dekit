@@ -128,6 +128,18 @@ export function generateInspectorScript(): string {
       }
     } else if (msg.type === 'CLEAR_HIGHLIGHT') {
       hideOverlay();
+    } else if (msg.type === 'SET_TOUCH_CURSOR') {
+      let touchStyle = document.getElementById('__redesign_touch_cursor__');
+      if (msg.enabled) {
+        if (!touchStyle) {
+          touchStyle = document.createElement('style');
+          touchStyle.id = '__redesign_touch_cursor__';
+          touchStyle.textContent = '* { cursor: none !important; }';
+          document.head.appendChild(touchStyle);
+        }
+      } else {
+        if (touchStyle) touchStyle.remove();
+      }
     }
   });
 })();

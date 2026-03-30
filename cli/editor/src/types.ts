@@ -29,7 +29,8 @@ export type IframeMessage =
 export type EditorMessage =
   | { type: "GET_DOM_TREE" }
   | { type: "HIGHLIGHT_NODE"; path: string }
-  | { type: "CLEAR_HIGHLIGHT" };
+  | { type: "CLEAR_HIGHLIGHT" }
+  | { type: "SET_TOUCH_CURSOR"; enabled: boolean };
 
 export interface DevicePreset {
   name: string;

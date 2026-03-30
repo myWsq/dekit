@@ -1,0 +1,15 @@
+version: 1.0
+global-style: "global.css"
+
+components:
+  my-banner:
+    template: "components/my-banner/banner.html"
+    style: "components/my-banner/banner.css"
+
+pages:
+  cover:
+    template: "pages/cover/cover.html"
+    style: "pages/cover/cover.css"
+  example:
+    template: "pages/example/example.html"
+    style: "pages/example/example.css"

@@ -1,0 +1,12 @@
+version: 1.0
+global-style: "global.css"
+components:
+  banner:
+    # name: "Banner"
+    # description: "A Banner Component"
+    template: "components/banner/banner.html"
+    style: "components/banner/banner.css"
+
+pages:
+  - name: "Cover"
+    template: "pages/cover.html"

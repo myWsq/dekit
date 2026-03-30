@@ -292,7 +292,7 @@ function DeviceToolbar({
   return (
     <div className="device-toolbar">
       <select
-        style={{ width: selectLabel.length + 3 + "ch" }}
+        style={{ width: selectLabel.length + 5 + "ch" }}
         value={
           deviceMode === "responsive"
             ? "responsive"

@@ -16,8 +16,13 @@ export async function startEditorServer(
     // API: return design config as JSON
     if (url === "/api/config") {
       const config = configRef.current;
+      const pagePaths: Record<string, string> = {};
+      for (const [name, def] of Object.entries(config.pages)) {
+        pagePaths[name] = join(config.baseDir, def.template);
+      }
       const payload = {
         pages: Object.keys(config.pages),
+        pagePaths,
         components: Object.keys(config.components),
         designServerUrl: `http://localhost:${designPort}`,
       };

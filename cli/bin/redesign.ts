@@ -1,18 +1,26 @@
 #!/usr/bin/env tsx
 import { resolve } from "node:path";
+import { existsSync } from "node:fs";
 import { parseDesignConfig } from "../src/parser.js";
 import { startServers } from "../src/server.js";
 
 function printUsage() {
   console.log(`
-Usage: redesign -c <design.yaml>
+Usage: redesign [-c <design.yaml>]
 
 Options:
-  -c, --config       Path to design.yaml (required)
+  -c, --config       Path to design.yaml (default: ./design.yaml or ./design.yml)
   -p, --port         Editor server port (default: 3000)
   --design-port      Design server port (default: 3001)
   -h, --help         Show this help message
 `);
+}
+
+function findDefaultConfig(): string | undefined {
+  for (const name of ["design.yaml", "design.yml"]) {
+    const p = resolve(name);
+    if (existsSync(p)) return p;
+  }
 }
 
 function parseArgs(args: string[]) {
@@ -40,13 +48,17 @@ async function main() {
     process.exit(0);
   }
 
-  if (!args.config) {
-    console.error("Error: -c <design.yaml> is required\n");
+  const configPath = args.config
+    ? resolve(args.config)
+    : findDefaultConfig();
+
+  if (!configPath) {
+    console.error(
+      "Error: no design.yaml or design.yml found in current directory. Use -c to specify a config file.\n"
+    );
     printUsage();
     process.exit(1);
   }
-
-  const configPath = resolve(args.config);
   let config;
   try {
     config = await parseDesignConfig(configPath);

@@ -15,6 +15,7 @@ export interface DOMTreeNode {
 
 export interface EditorConfig {
   pages: string[];
+  pagePaths: Record<string, string>;
   components: string[];
   designServerUrl: string;
 }
@@ -31,7 +32,8 @@ export type EditorMessage =
   | { type: "HIGHLIGHT_NODE"; path: string }
   | { type: "HOVER_NODE"; path: string }
   | { type: "CLEAR_HIGHLIGHT" }
-  | { type: "SET_TOUCH_CURSOR"; enabled: boolean };
+  | { type: "SET_TOUCH_CURSOR"; enabled: boolean }
+  | { type: "SET_INSPECT_MODE"; enabled: boolean };
 
 export interface DevicePreset {
   name: string;

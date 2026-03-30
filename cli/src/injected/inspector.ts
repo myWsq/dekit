@@ -3,6 +3,8 @@ export function generateInspectorScript(): string {
 (function() {
   let overlay = null;
   let selectedNode = null;
+  let inspectEnabled = false;
+  let pageName = '';
 
   function isOverlayEl(el) {
     if (!overlay) return false;
@@ -213,6 +215,7 @@ export function generateInspectorScript(): string {
   }
 
   document.addEventListener('click', function(e) {
+    if (!inspectEnabled) return;
     e.preventDefault();
     e.stopPropagation();
     const node = e.target;
@@ -223,6 +226,7 @@ export function generateInspectorScript(): string {
   }, true);
 
   document.addEventListener('mouseover', function(e) {
+    if (!inspectEnabled) return;
     const node = e.target;
     if (isOverlayEl(node)) return;
     showOverlay(node);
@@ -231,9 +235,22 @@ export function generateInspectorScript(): string {
   }, true);
 
   document.addEventListener('mouseout', function(e) {
+    if (!inspectEnabled) return;
     const related = e.relatedTarget;
     if (related && isOverlayEl(related)) return;
     hideOverlay();
+  }, true);
+
+  // Forward Alt key events to parent for inspect mode toggle
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Alt') {
+      window.parent.postMessage({ type: 'INSPECT_KEY', pressed: true }, '*');
+    }
+  }, true);
+  document.addEventListener('keyup', function(e) {
+    if (e.key === 'Alt') {
+      window.parent.postMessage({ type: 'INSPECT_KEY', pressed: false }, '*');
+    }
   }, true);
 
   window.addEventListener('message', function(e) {
@@ -269,6 +286,26 @@ export function generateInspectorScript(): string {
         }
       } else {
         if (touchStyle) touchStyle.remove();
+      }
+    } else if (msg.type === 'SET_INSPECT_MODE') {
+      inspectEnabled = !!msg.enabled;
+      if (!inspectEnabled) {
+        hideOverlay();
+      }
+    } else if (msg.type === 'SET_PAGE_NAME') {
+      pageName = msg.page || '';
+    } else if (msg.type === 'COPY_FEEDBACK') {
+      if (overlay) {
+        var tip = overlay.querySelector('.__rl_tooltip');
+        if (tip) {
+          var orig = tip.textContent;
+          tip.textContent = '\\u2713 Copied';
+          tip.style.color = '#4ade80';
+          setTimeout(function() {
+            tip.textContent = orig;
+            tip.style.color = '#fff';
+          }, 800);
+        }
       }
     }
   });

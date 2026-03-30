@@ -24,7 +24,7 @@ body {
 .left-panel {
   width: 240px;
   background: #252526;
-  border-right: 1px solid #3c3c3c;
+  border-right: 1px solid #4a4a4a;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -43,19 +43,53 @@ body {
 .right-panel {
   width: 280px;
   background: #252526;
-  border-left: 1px solid #3c3c3c;
-  overflow-y: auto;
+  border-left: 1px solid #4a4a4a;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.right-panel-top {
+  flex: 0 0 35%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-bottom: 1px solid #4a4a4a;
+}
+
+.right-panel-top .layer-tree-scroll {
+  flex: 1;
+}
+
+.right-panel-bottom {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.right-panel-bottom .properties-scroll {
+  flex: 1;
+}
+
+.page-list-scroll {
+  flex: 1;
 }
 
 .panel-header {
-  padding: 8px 12px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: #969696;
-  border-bottom: 1px solid #3c3c3c;
+  background: #3c3c3c;
+  border-bottom: 1px solid #4a4a4a;
   user-select: none;
+  flex-shrink: 0;
 }
 
 .page-list {
@@ -75,8 +109,16 @@ body {
 }
 
 .page-item.active {
+  background: #2a2d2e;
+}
+
+.page-list.focused .page-item.active {
   background: #37373d;
   color: #ffffff;
+}
+
+.page-list:focus {
+  outline: none;
 }
 
 .canvas-iframe {
@@ -91,8 +133,6 @@ body {
 .layer-tree {
   padding: 4px 0;
   font-size: 13px;
-  overflow-y: auto;
-  flex: 1;
 }
 
 .layer-node {
@@ -108,8 +148,16 @@ body {
 }
 
 .layer-node.selected {
+  background: #2a2d2e;
+}
+
+.layer-tree.focused .layer-node.selected {
   background: #37373d;
   color: #ffffff;
+}
+
+.layer-tree:focus {
+  outline: none;
 }
 
 .layer-tag {
@@ -125,6 +173,24 @@ body {
 .property-section {
   padding: 8px 12px;
   border-bottom: 1px solid #3c3c3c;
+}
+
+.node-ref {
+  cursor: pointer;
+  color: #e2c08d;
+  white-space: nowrap;
+}
+
+.node-ref:hover {
+  color: #f5d9a0;
+}
+
+.property-value.copyable {
+  cursor: pointer;
+}
+
+.property-value.copyable:hover {
+  color: #e0a56a;
 }
 
 .property-section-title {
@@ -161,20 +227,24 @@ body {
   font-size: 13px;
 }
 
-/* Device Toolbar — matches Chrome DevTools device-mode bar */
+/* Device Toolbar — matches panel headers */
 .device-toolbar {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  padding: 4px 16px;
-  height: 33px;
+  padding: 0 16px;
+  height: 28px;
   background: #3c3c3c;
-  border-top: 1px solid #4a4a4a;
-  border-bottom: 1px solid #2a2a2a;
+  border-bottom: 1px solid #4a4a4a;
   font-size: 12px;
+  line-height: 1;
   color: #cccccc;
   user-select: none;
+  flex-shrink: 0;
+}
+
+.device-toolbar > * {
   flex-shrink: 0;
 }
 
@@ -182,8 +252,10 @@ body {
   background: transparent;
   border: none;
   color: #cccccc;
-  padding: 2px 4px;
+  padding: 0 4px;
+  height: 20px;
   font-size: 12px;
+  line-height: 20px;
   outline: none;
   cursor: pointer;
 }
@@ -201,9 +273,11 @@ body {
   border: none;
   border-bottom: 1px solid transparent;
   color: #cccccc;
-  padding: 2px 2px;
+  padding: 0 2px;
+  height: 20px;
   text-align: center;
   font-size: 12px;
+  line-height: 20px;
   outline: none;
   min-width: 3ch;
 }
@@ -230,20 +304,24 @@ body {
 }
 
 .device-toolbar .dim-separator {
-  color: #888;
-  font-size: 13px;
+  color: #999;
   margin: 0 -4px;
+  flex-shrink: 0;
 }
 
 .device-toolbar .toolbar-btn {
   background: transparent;
   border: none;
   color: #999;
-  padding: 4px 6px;
+  padding: 0 4px;
+  height: 20px;
   border-radius: 3px;
   cursor: pointer;
   font-size: 14px;
   line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .device-toolbar .toolbar-btn:hover {
@@ -257,7 +335,15 @@ body {
 .device-toolbar .dpr-badge {
   font-size: 11px;
   color: #999;
-  padding: 1px 0;
+  height: 20px;
+  line-height: 20px;
+}
+
+.device-toolbar .toolbar-divider {
+  width: 1px;
+  height: 14px;
+  background: #555;
+  flex-shrink: 0;
 }
 
 .canvas-area {
@@ -269,6 +355,30 @@ body {
   position: relative;
   padding: 24px;
   min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.canvas-area::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.canvas-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.canvas-area::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.canvas-area::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.canvas-area::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 .canvas-area.with-grid {
@@ -292,24 +402,50 @@ body {
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
 }
 
-/* Touch cursor overlay */
-.touch-cursor-overlay {
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: rgba(37, 99, 235, 0.3);
-  border: 2px solid rgba(37, 99, 235, 0.6);
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  display: none;
-  z-index: 10;
+/* OverlayScrollbars dark theme */
+.os-theme-dark > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle {
+  background: rgba(255, 255, 255, 0.2);
 }
 
-.canvas-area.touch-active .touch-cursor-overlay {
-  display: block;
+.os-theme-dark > .os-scrollbar:hover > .os-scrollbar-track > .os-scrollbar-handle {
+  background: rgba(255, 255, 255, 0.35);
 }
 
-.canvas-area.touch-active .iframe-wrapper {
-  cursor: none;
+.os-theme-dark > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle.active {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.os-theme-dark > .os-scrollbar {
+  --os-size: 6px;
+  --os-padding-perpendicular: 1px;
+  --os-padding-axis: 1px;
+}
+
+.os-theme-dark > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Context menu */
+.context-menu {
+  position: fixed;
+  z-index: 10000;
+  background: #2d2d2d;
+  border: 1px solid #4a4a4a;
+  border-radius: 4px;
+  padding: 4px 0;
+  min-width: 120px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.context-menu-item {
+  padding: 6px 12px;
+  font-size: 12px;
+  color: #cccccc;
+  cursor: pointer;
+  user-select: none;
+}
+
+.context-menu-item:hover {
+  background: #094771;
+  color: #ffffff;
 }

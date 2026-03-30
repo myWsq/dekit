@@ -10,6 +10,14 @@ export function App() {
   const [domTree, setDomTree] = useState<DOMTreeNode[]>([]);
   const [selectedPath, setSelectedPath] = useState<string>("");
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [deviceMode, setDeviceMode] = useState("responsive");
+  const [deviceWidth, setDeviceWidth] = useState(0);
+  const [deviceHeight, setDeviceHeight] = useState(0);
+  const [zoomMode, setZoomMode] = useState<"fit" | number>("fit");
+  const [touchCursor, setTouchCursor] = useState(false);
+  const canvasAreaRef = useRef<HTMLDivElement>(null);
+  const touchOverlayRef = useRef<HTMLDivElement>(null);
+  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
 
   // Fetch config
   useEffect(() => {
@@ -52,6 +60,63 @@ export function App() {
     );
     setSelectedPath(path);
   }, []);
+
+  // Track canvas area size for auto-fit calculation
+  useEffect(() => {
+    const el = canvasAreaRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver((entries) => {
+      const { width, height } = entries[0].contentRect;
+      setCanvasSize({ width, height });
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  // Send touch cursor state to iframe
+  useEffect(() => {
+    iframeRef.current?.contentWindow?.postMessage(
+      { type: "SET_TOUCH_CURSOR", enabled: touchCursor },
+      "*"
+    );
+  }, [touchCursor]);
+
+  // Touch cursor overlay follows mouse
+  const handleCanvasMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (!touchCursor || !touchOverlayRef.current) return;
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+      touchOverlayRef.current.style.left = `${e.clientX - rect.left}px`;
+      touchOverlayRef.current.style.top = `${e.clientY - rect.top}px`;
+    },
+    [touchCursor]
+  );
+
+  const handleRotate = useCallback(() => {
+    setDeviceWidth((prev) => {
+      const oldHeight = deviceHeight;
+      setDeviceHeight(prev);
+      return oldHeight;
+    });
+  }, [deviceHeight]);
+
+  // Calculate scale and iframe dimensions
+  const isDeviceActive = deviceWidth > 0 && deviceHeight > 0;
+  const padding = 24;
+
+  let scaleFactor = 1;
+  if (isDeviceActive && canvasSize.width > 0 && canvasSize.height > 0) {
+    if (zoomMode === "fit") {
+      scaleFactor = calcScale(
+        deviceWidth,
+        deviceHeight,
+        canvasSize.width - padding * 2,
+        canvasSize.height - padding * 2
+      );
+    } else {
+      scaleFactor = Math.max(0.1, zoomMode / 100);
+    }
+  }
 
   if (!config) {
     return <div className="empty-state">Loading...</div>;
@@ -97,17 +162,61 @@ export function App() {
       </div>
 
       {/* Center Panel */}
-      <div className="center-panel">
-        {iframeSrc ? (
-          <iframe
-            ref={iframeRef}
-            className="canvas-iframe"
-            src={iframeSrc}
-            onLoad={handleIframeLoad}
-          />
-        ) : (
-          <div className="empty-state">Select a page</div>
-        )}
+      <div className={`center-panel ${isDeviceActive ? "device-active" : ""}`}>
+        <DeviceToolbar
+          deviceMode={deviceMode}
+          deviceWidth={deviceWidth}
+          deviceHeight={deviceHeight}
+          zoomMode={zoomMode}
+          touchCursor={touchCursor}
+          onDeviceChange={setDeviceMode}
+          onWidthChange={setDeviceWidth}
+          onHeightChange={setDeviceHeight}
+          onRotate={handleRotate}
+          onZoomChange={setZoomMode}
+          onTouchCursorToggle={() => setTouchCursor((prev) => !prev)}
+        />
+        <div
+          ref={canvasAreaRef}
+          className={`canvas-area ${isDeviceActive ? "with-grid" : ""} ${touchCursor ? "touch-active" : ""}`}
+          onMouseMove={handleCanvasMouseMove}
+        >
+          {iframeSrc ? (
+            isDeviceActive ? (
+              <div
+                className="iframe-wrapper"
+                style={{
+                  width: deviceWidth * scaleFactor,
+                  height: deviceHeight * scaleFactor,
+                }}
+              >
+                <iframe
+                  ref={iframeRef}
+                  className="canvas-iframe"
+                  src={iframeSrc}
+                  onLoad={handleIframeLoad}
+                  style={{
+                    width: deviceWidth,
+                    height: deviceHeight,
+                    transform: `scale(${scaleFactor})`,
+                    transformOrigin: "top left",
+                  }}
+                />
+              </div>
+            ) : (
+              <iframe
+                ref={iframeRef}
+                className="canvas-iframe"
+                src={iframeSrc}
+                onLoad={handleIframeLoad}
+                style={{ width: "100%", height: "100%", border: "1px solid #3c3c3c" }}
+              />
+            )
+          ) : (
+            <div className="empty-state">Select a page</div>
+          )}
+          <div ref={touchOverlayRef} className="touch-cursor-overlay" />
+        </div>
       </div>
 
       {/* Right Panel */}

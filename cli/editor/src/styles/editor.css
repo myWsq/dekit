@@ -34,9 +34,9 @@ body {
   flex: 1;
   background: #1e1e1e;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
   min-width: 0;
 }
 
@@ -239,12 +239,6 @@ body {
   border-radius: 3px;
 }
 
-/* Canvas area with grid background */
-.center-panel.device-active {
-  padding: 0;
-  flex-direction: column;
-}
-
 .canvas-area {
   flex: 1;
   display: flex;
@@ -252,6 +246,8 @@ body {
   justify-content: center;
   overflow: auto;
   position: relative;
+  padding: 24px;
+  min-height: 0;
 }
 
 .canvas-area.with-grid {

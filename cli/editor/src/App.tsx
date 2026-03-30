@@ -102,16 +102,16 @@ export function App() {
 
   // Calculate scale and iframe dimensions
   const isDeviceActive = deviceWidth > 0 && deviceHeight > 0;
-  const padding = 24;
 
   let scaleFactor = 1;
   if (isDeviceActive && canvasSize.width > 0 && canvasSize.height > 0) {
     if (zoomMode === "fit") {
+      // canvasSize comes from contentRect which already excludes CSS padding
       scaleFactor = calcScale(
         deviceWidth,
         deviceHeight,
-        canvasSize.width - padding * 2,
-        canvasSize.height - padding * 2
+        canvasSize.width,
+        canvasSize.height
       );
     } else {
       scaleFactor = Math.max(0.1, zoomMode / 100);
@@ -162,7 +162,7 @@ export function App() {
       </div>
 
       {/* Center Panel */}
-      <div className={`center-panel ${isDeviceActive ? "device-active" : ""}`}>
+      <div className="center-panel">
         <DeviceToolbar
           deviceMode={deviceMode}
           deviceWidth={deviceWidth}

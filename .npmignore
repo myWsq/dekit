@@ -1,0 +1,8 @@
+example/
+.github/
+.claude/
+.superpowers/
+*.test.ts
+.gitignore
+.DS_Store
+docs/

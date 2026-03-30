@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import type { EditorConfig, NodeInfo, DOMTreeNode, IframeMessage } from "./types.js";
+import { DEVICE_PRESETS, calcScale } from "./devices.js";
+import type { DevicePreset } from "./types.js";
 
 export function App() {
   const [config, setConfig] = useState<EditorConfig | null>(null);
@@ -117,6 +119,138 @@ export function App() {
           <div className="empty-state">Select an element to inspect</div>
         )}
       </div>
+    </div>
+  );
+}
+
+function DeviceToolbar({
+  deviceMode,
+  deviceWidth,
+  deviceHeight,
+  zoomMode,
+  touchCursor,
+  onDeviceChange,
+  onWidthChange,
+  onHeightChange,
+  onRotate,
+  onZoomChange,
+  onTouchCursorToggle,
+}: {
+  deviceMode: string;
+  deviceWidth: number;
+  deviceHeight: number;
+  zoomMode: "fit" | number;
+  touchCursor: boolean;
+  onDeviceChange: (mode: string) => void;
+  onWidthChange: (w: number) => void;
+  onHeightChange: (h: number) => void;
+  onRotate: () => void;
+  onZoomChange: (zoom: "fit" | number) => void;
+  onTouchCursorToggle: () => void;
+}) {
+  const currentPreset = DEVICE_PRESETS.find((d) => d.name === deviceMode);
+  const dpr = currentPreset?.dpr ?? 1;
+
+  return (
+    <div className="device-toolbar">
+      <select
+        value={
+          deviceMode === "responsive"
+            ? "responsive"
+            : currentPreset
+              ? deviceMode
+              : "custom"
+        }
+        onChange={(e) => {
+          const val = e.target.value;
+          if (val === "responsive") {
+            onDeviceChange("responsive");
+            onWidthChange(0);
+            onHeightChange(0);
+          } else if (val === "custom") {
+            onDeviceChange("custom");
+          } else {
+            const preset = DEVICE_PRESETS.find((d) => d.name === val);
+            if (preset) {
+              onDeviceChange(preset.name);
+              onWidthChange(preset.width);
+              onHeightChange(preset.height);
+            }
+          }
+        }}
+      >
+        <option value="responsive">Responsive</option>
+        {DEVICE_PRESETS.map((d) => (
+          <option key={d.name} value={d.name}>
+            {d.name} — {d.width}×{d.height}
+          </option>
+        ))}
+        {deviceMode === "custom" && <option value="custom">Custom</option>}
+      </select>
+
+      <input
+        className="dim-input"
+        type="number"
+        min={0}
+        value={deviceWidth || ""}
+        placeholder="W"
+        onChange={(e) => {
+          const w = parseInt(e.target.value) || 0;
+          onWidthChange(w);
+          if (deviceMode !== "responsive" && deviceMode !== "custom") {
+            onDeviceChange("custom");
+          }
+        }}
+      />
+      <span className="dim-separator">×</span>
+      <input
+        className="dim-input"
+        type="number"
+        min={0}
+        value={deviceHeight || ""}
+        placeholder="H"
+        onChange={(e) => {
+          const h = parseInt(e.target.value) || 0;
+          onHeightChange(h);
+          if (deviceMode !== "responsive" && deviceMode !== "custom") {
+            onDeviceChange("custom");
+          }
+        }}
+      />
+
+      <button
+        className="toolbar-btn"
+        title="Rotate"
+        onClick={onRotate}
+        disabled={!deviceWidth || !deviceHeight}
+      >
+        ↻
+      </button>
+
+      <select
+        value={zoomMode}
+        onChange={(e) => {
+          const val = e.target.value;
+          onZoomChange(val === "fit" ? "fit" : parseInt(val));
+        }}
+      >
+        <option value="fit">Fit</option>
+        <option value={50}>50%</option>
+        <option value={75}>75%</option>
+        <option value={100}>100%</option>
+        <option value={125}>125%</option>
+        <option value={150}>150%</option>
+      </select>
+
+      <span className="dpr-badge">DPR: {dpr}</span>
+
+      <button
+        className={`toolbar-btn ${touchCursor ? "active" : ""}`}
+        title="Touch cursor"
+        onClick={onTouchCursorToggle}
+      >
+        👆
+      </button>
     </div>
   );
 }

@@ -218,7 +218,6 @@ export function generateInspectorScript(): string {
     const node = e.target;
     if (isOverlayEl(node)) return;
     selectedNode = node;
-    hideOverlay();
     const info = getNodeInfo(node);
     window.parent.postMessage({ type: 'NODE_SELECTED', node: info }, '*');
   }, true);

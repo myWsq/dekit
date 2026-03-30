@@ -64,29 +64,50 @@ export function generateInspectorScript(): string {
     overlay.style.width = mw + 'px';
     overlay.style.height = mh + 'px';
 
+    // Coordinates relative to overlay container (margin box origin)
+    // Border box
+    const bx0 = ml, by0 = mt;
+    const bx1 = ml + rect.width, by1 = mt + rect.height;
+    // Padding box
+    const px0 = ml + blw, py0 = mt + bt;
+    const px1 = ml + rect.width - br, py1 = mt + rect.height - bb;
+    // Content box
+    const cx0 = ml + blw + pl, cy0 = mt + bt + pt;
+    const cx1 = ml + rect.width - br - pr, cy1 = mt + rect.height - bb - pb;
+
+    function ring(ox0, oy0, ox1, oy1, ix0, iy0, ix1, iy1) {
+      return 'polygon(evenodd, ' +
+        ox0+'px '+oy0+'px,'+ox1+'px '+oy0+'px,'+ox1+'px '+oy1+'px,'+ox0+'px '+oy1+'px,' +
+        ix0+'px '+iy0+'px,'+ix1+'px '+iy0+'px,'+ix1+'px '+iy1+'px,'+ix0+'px '+iy1+'px)';
+    }
+
+    // Each ring layer fills the container; clip-path cuts it to only show its ring
     const marginEl = overlay.querySelector('.__rl_margin');
     marginEl.style.left = '0px';
     marginEl.style.top = '0px';
     marginEl.style.width = mw + 'px';
     marginEl.style.height = mh + 'px';
+    marginEl.style.clipPath = ring(0, 0, mw, mh, bx0, by0, bx1, by1);
 
     const borderEl = overlay.querySelector('.__rl_border');
-    borderEl.style.left = ml + 'px';
-    borderEl.style.top = mt + 'px';
-    borderEl.style.width = rect.width + 'px';
-    borderEl.style.height = rect.height + 'px';
+    borderEl.style.left = '0px';
+    borderEl.style.top = '0px';
+    borderEl.style.width = mw + 'px';
+    borderEl.style.height = mh + 'px';
+    borderEl.style.clipPath = ring(bx0, by0, bx1, by1, px0, py0, px1, py1);
 
     const paddingEl = overlay.querySelector('.__rl_padding');
-    paddingEl.style.left = (ml + blw) + 'px';
-    paddingEl.style.top = (mt + bt) + 'px';
-    paddingEl.style.width = (rect.width - blw - br) + 'px';
-    paddingEl.style.height = (rect.height - bt - bb) + 'px';
+    paddingEl.style.left = '0px';
+    paddingEl.style.top = '0px';
+    paddingEl.style.width = mw + 'px';
+    paddingEl.style.height = mh + 'px';
+    paddingEl.style.clipPath = ring(px0, py0, px1, py1, cx0, cy0, cx1, cy1);
 
     const contentEl = overlay.querySelector('.__rl_content');
-    contentEl.style.left = (ml + blw + pl) + 'px';
-    contentEl.style.top = (mt + bt + pt) + 'px';
-    contentEl.style.width = (rect.width - blw - br - pl - pr) + 'px';
-    contentEl.style.height = (rect.height - bt - bb - pt - pb) + 'px';
+    contentEl.style.left = cx0 + 'px';
+    contentEl.style.top = cy0 + 'px';
+    contentEl.style.width = Math.max(0, cx1 - cx0) + 'px';
+    contentEl.style.height = Math.max(0, cy1 - cy0) + 'px';
 
     const tip = overlay.querySelector('.__rl_tooltip');
     const tag = node.tagName.toLowerCase();

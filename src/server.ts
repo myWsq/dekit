@@ -11,7 +11,7 @@ export interface ServerOptions {
 export async function startServers(options: ServerOptions) {
   const configRef = { current: options.config };
 
-  console.log("\n  Redesign Dev Server\n");
+  console.log("\n  Dekit Dev Server\n");
 
   const designServer = await startDesignServer(configRef, options.designPort);
   const editorServer = await startEditorServer(

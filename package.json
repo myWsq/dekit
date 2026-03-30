@@ -1,15 +1,23 @@
 {
-  "name": "redesign-cli",
+  "name": "dekit",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
+  "description": "A code-first design toolkit — preview, inspect, and debug your HTML/CSS designs in the browser",
+  "keywords": ["design", "devtools", "inspector", "preview", "css", "html", "cli"],
+  "license": "Apache-2.0",
+  "repository": { "type": "git", "url": "https://github.com/user/dekit" },
+  "homepage": "https://github.com/user/dekit",
+  "bugs": { "url": "https://github.com/user/dekit/issues" },
+  "files": ["bin/", "src/", "editor/", "dist/"],
+  "engines": { "node": ">=18" },
   "bin": {
-    "redesign": "./bin/redesign.ts"
+    "dekit": "./bin/dekit.ts"
   },
   "scripts": {
-    "dev": "tsx bin/redesign.ts",
+    "dev": "tsx bin/dekit.ts",
     "build:editor": "vite build --config editor/vite.config.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepublishOnly": "npm run build:editor"
   },
   "dependencies": {
     "js-yaml": "^4.1.0",

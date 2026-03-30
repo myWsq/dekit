@@ -1,6 +1,6 @@
 import { createServer, type ViteDevServer } from "vite";
 import type { DesignConfig } from "./types.js";
-import { redesignPlugin } from "./vite-plugin-redesign.js";
+import { dekitPlugin } from "./vite-plugin-dekit.js";
 
 export async function startDesignServer(
   configRef: { current: DesignConfig },
@@ -14,7 +14,7 @@ export async function startDesignServer(
       strictPort: true,
       cors: true,
     },
-    plugins: [redesignPlugin(configRef)],
+    plugins: [dekitPlugin(configRef)],
     logLevel: "silent",
   });
 

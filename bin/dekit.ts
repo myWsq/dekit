@@ -6,7 +6,7 @@ import { startServers } from "../src/server.js";
 
 function printUsage() {
   console.log(`
-Usage: redesign [-c <design.yaml>]
+Usage: dekit [-c <design.yaml>]
 
 Options:
   -c, --config       Path to design.yaml (default: ./design.yaml or ./design.yml)

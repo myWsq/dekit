@@ -13,7 +13,7 @@ export function generateInspectorScript(): string {
 
   function createOverlay() {
     const el = document.createElement('div');
-    el.id = '__redesign_overlay__';
+    el.id = '__dekit_overlay__';
     el.style.cssText = 'position:fixed;pointer-events:none;z-index:999999;display:none;';
 
     const layers = ['margin','border','padding','content'];
@@ -186,7 +186,7 @@ export function generateInspectorScript(): string {
   function buildDomTree(node) {
     if (node.nodeType !== 1) return null;
     const tagName = node.tagName.toLowerCase();
-    if (tagName === 'script' || tagName === 'style' || node.id === '__redesign_overlay__') return null;
+    if (tagName === 'script' || tagName === 'style' || node.id === '__dekit_overlay__') return null;
     const children = [];
     for (const child of node.children) {
       const subtree = buildDomTree(child);
@@ -276,11 +276,11 @@ export function generateInspectorScript(): string {
       selectedNode = null;
       hideOverlay();
     } else if (msg.type === 'SET_TOUCH_CURSOR') {
-      let touchStyle = document.getElementById('__redesign_touch_cursor__');
+      let touchStyle = document.getElementById('__dekit_touch_cursor__');
       if (msg.enabled) {
         if (!touchStyle) {
           touchStyle = document.createElement('style');
-          touchStyle.id = '__redesign_touch_cursor__';
+          touchStyle.id = '__dekit_touch_cursor__';
           touchStyle.textContent = '* { cursor: none !important; }';
           document.head.appendChild(touchStyle);
         }

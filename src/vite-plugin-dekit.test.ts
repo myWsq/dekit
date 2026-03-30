@@ -1,9 +1,9 @@
 import { describe, test, expect } from "vitest";
-import { assemblePageHtml } from "./vite-plugin-redesign.js";
+import { assemblePageHtml } from "./vite-plugin-dekit.js";
 import type { DesignConfig } from "./types.js";
 import { join } from "node:path";
 
-const DESIGN_DIR = join(import.meta.dirname, "../../design");
+const DESIGN_DIR = join(import.meta.dirname, "../example");
 
 const mockConfig: DesignConfig = {
   version: 1.0,
@@ -29,7 +29,7 @@ describe("assemblePageHtml", () => {
     expect(html).toContain("<!DOCTYPE html>");
     expect(html).toContain("global.css");
     expect(html).toContain("pages/cover/cover.css");
-    expect(html).toContain("Welcome to Redesign");
+    expect(html).toContain("Welcome to Dekit");
     expect(html).toContain("customElements.define");
     expect(html).toContain("my-banner");
   });

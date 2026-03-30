@@ -44,9 +44,9 @@ ${inspectorScript}
 </html>`;
 }
 
-export function redesignPlugin(configRef: { current: DesignConfig }): Plugin {
+export function dekitPlugin(configRef: { current: DesignConfig }): Plugin {
   return {
-    name: "vite-plugin-redesign",
+    name: "vite-plugin-dekit",
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         const url = req.url ?? "";

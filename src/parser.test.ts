@@ -2,7 +2,7 @@ import { describe, test, expect } from "vitest";
 import { parseDesignConfig } from "./parser.js";
 import { join } from "node:path";
 
-const DESIGN_DIR = join(import.meta.dirname, "../../design");
+const DESIGN_DIR = join(import.meta.dirname, "../example");
 
 describe("parseDesignConfig", () => {
   test("parses valid design.yaml", async () => {

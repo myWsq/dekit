@@ -218,7 +218,7 @@ export function generateInspectorScript(): string {
     const node = e.target;
     if (isOverlayEl(node)) return;
     selectedNode = node;
-    showOverlay(node);
+    hideOverlay();
     const info = getNodeInfo(node);
     window.parent.postMessage({ type: 'NODE_SELECTED', node: info }, '*');
   }, true);
@@ -234,11 +234,7 @@ export function generateInspectorScript(): string {
   document.addEventListener('mouseout', function(e) {
     const related = e.relatedTarget;
     if (related && isOverlayEl(related)) return;
-    if (selectedNode) {
-      showOverlay(selectedNode);
-    } else {
-      hideOverlay();
-    }
+    hideOverlay();
   }, true);
 
   window.addEventListener('message', function(e) {
@@ -251,7 +247,7 @@ export function generateInspectorScript(): string {
       const node = resolveNodeByPath(msg.path);
       if (node) {
         selectedNode = node;
-        showOverlay(node);
+        hideOverlay();
         const info = getNodeInfo(node);
         window.parent.postMessage({ type: 'NODE_SELECTED', node: info }, '*');
       }

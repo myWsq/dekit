@@ -161,15 +161,17 @@ body {
   font-size: 13px;
 }
 
-/* Device Toolbar */
+/* Device Toolbar — matches Chrome DevTools device-mode bar */
 .device-toolbar {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 6px 12px;
-  background: #2d2d30;
-  border-bottom: 1px solid #3c3c3c;
+  gap: 12px;
+  padding: 4px 16px;
+  height: 33px;
+  background: #3c3c3c;
+  border-top: 1px solid #4a4a4a;
+  border-bottom: 1px solid #2a2a2a;
   font-size: 12px;
   color: #cccccc;
   user-select: none;
@@ -177,66 +179,73 @@ body {
 }
 
 .device-toolbar select {
-  background: #3c3c3c;
-  border: 1px solid #555;
+  background: transparent;
+  border: none;
   color: #cccccc;
-  padding: 2px 8px;
-  border-radius: 3px;
+  padding: 2px 4px;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+}
+
+.device-toolbar select:hover {
+  color: #ffffff;
+}
+
+.device-toolbar select:focus {
+  color: #ffffff;
+}
+
+.device-toolbar .dim-input {
+  width: 48px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid transparent;
+  color: #cccccc;
+  padding: 2px 2px;
+  text-align: center;
   font-size: 12px;
   outline: none;
 }
 
-.device-toolbar select:focus {
-  border-color: #2563eb;
-}
-
-.device-toolbar .dim-input {
-  width: 52px;
-  background: #3c3c3c;
-  border: 1px solid #555;
-  color: #cccccc;
-  padding: 2px 4px;
-  border-radius: 3px;
-  text-align: center;
-  font-size: 11px;
-  outline: none;
+.device-toolbar .dim-input:hover {
+  border-bottom-color: #666;
 }
 
 .device-toolbar .dim-input:focus {
-  border-color: #2563eb;
+  color: #ffffff;
+  border-bottom-color: #2563eb;
 }
 
 .device-toolbar .dim-separator {
-  color: #666;
+  color: #888;
+  font-size: 13px;
+  margin: 0 -4px;
 }
 
 .device-toolbar .toolbar-btn {
-  background: none;
-  border: 1px solid #555;
-  color: #cccccc;
-  padding: 2px 6px;
+  background: transparent;
+  border: none;
+  color: #999;
+  padding: 4px 6px;
   border-radius: 3px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1;
 }
 
 .device-toolbar .toolbar-btn:hover {
-  background: #3c3c3c;
+  color: #ffffff;
 }
 
 .device-toolbar .toolbar-btn.active {
-  background: #2563eb;
-  border-color: #2563eb;
-  color: #ffffff;
+  color: #2563eb;
 }
 
 .device-toolbar .dpr-badge {
   font-size: 11px;
-  color: #969696;
-  border: 1px solid #555;
-  padding: 1px 6px;
-  border-radius: 3px;
+  color: #999;
+  padding: 1px 0;
 }
 
 .canvas-area {

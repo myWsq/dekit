@@ -1,0 +1,65 @@
+<h2>Design: Device Toolbar (v2)</h2>
+<p class="subtitle">Controls centered, matching Chrome DevTools style</p>
+
+<div class="mockup">
+  <div class="mockup-header">Toolbar — Centered Layout (Chrome DevTools style)</div>
+  <div class="mockup-body" style="padding:0;">
+    <!-- Toolbar mockup - centered -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:12px;padding:6px 12px;background:#2d2d30;border-bottom:1px solid #3c3c3c;font-size:13px;color:#ccc;font-family:system-ui;">
+      <!-- Device select -->
+      <select style="background:#3c3c3c;border:1px solid #555;color:#ccc;padding:2px 8px;border-radius:3px;font-size:12px;">
+        <option>Responsive</option>
+        <option>iPhone 14 Pro — 393×852</option>
+        <option>iPhone SE — 375×667</option>
+        <option>iPad Air — 820×1180</option>
+        <option>Galaxy S24 — 360×780</option>
+        <option>Desktop — 1920×1080</option>
+      </select>
+
+      <!-- Dimensions -->
+      <div style="display:flex;align-items:center;gap:4px;font-size:12px;">
+        <input style="width:50px;background:#3c3c3c;border:1px solid #555;color:#ccc;padding:2px 4px;border-radius:3px;text-align:center;font-size:11px;" value="393"/>
+        <span style="color:#666;">×</span>
+        <input style="width:50px;background:#3c3c3c;border:1px solid #555;color:#ccc;padding:2px 4px;border-radius:3px;text-align:center;font-size:11px;" value="852"/>
+      </div>
+
+      <!-- Rotate button -->
+      <button style="background:none;border:1px solid #555;color:#ccc;padding:2px 6px;border-radius:3px;cursor:pointer;font-size:14px;" title="Rotate">&#8635;</button>
+
+      <!-- Zoom -->
+      <div style="display:flex;align-items:center;gap:4px;font-size:12px;">
+        <select style="background:#3c3c3c;border:1px solid #555;color:#ccc;padding:2px 6px;border-radius:3px;font-size:11px;">
+          <option>Fit</option>
+          <option>50%</option>
+          <option>75%</option>
+          <option>100%</option>
+          <option>125%</option>
+          <option>150%</option>
+        </select>
+      </div>
+
+      <!-- DPR -->
+      <span style="font-size:11px;color:#969696;border:1px solid #555;padding:1px 6px;border-radius:3px;">DPR: 3</span>
+
+      <!-- Touch cursor toggle -->
+      <button style="background:none;border:1px solid #555;color:#969696;padding:2px 6px;border-radius:3px;cursor:pointer;font-size:12px;" title="Touch cursor">👆</button>
+    </div>
+
+    <!-- Canvas area preview -->
+    <div style="background:repeating-conic-gradient(#1a1a1a 0% 25%, #222 0% 50%) 0 0 / 20px 20px;display:flex;align-items:center;justify-content:center;padding:40px;min-height:300px;">
+      <div style="width:200px;height:380px;background:#fff;border-radius:4px;box-shadow:0 2px 20px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;color:#333;font-size:14px;font-family:system-ui;">
+        iframe<br>393 × 852
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:24px;">
+  <h3>Changes from v1</h3>
+  <ul style="font-size:14px;line-height:1.8;">
+    <li><strong>Controls centered</strong> — all toolbar items grouped in the center, like Chrome DevTools</li>
+    <li><strong>Merged Responsive toggle into dropdown</strong> — "Responsive" is now the first option in the device dropdown (same as DevTools)</li>
+    <li><strong>Simplified zoom</strong> — just "Fit" instead of "Auto fit"</li>
+    <li><strong>Compact DPR</strong> — shows as a small badge</li>
+  </ul>
+</div>

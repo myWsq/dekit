@@ -1,0 +1,45 @@
+<h2>Implementation Approach</h2>
+<p class="subtitle">Two approaches for the device simulator — pick one</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>CSS Transform Scale (Recommended)</h3>
+      <p><strong>How:</strong> Set iframe to device's exact pixel dimensions (e.g. 390×844), then use <code>transform: scale()</code> to fit it into the available canvas space.</p>
+      <p><strong>Pros:</strong></p>
+      <ul>
+        <li>Pixel-perfect — iframe sees real device dimensions, CSS media queries fire correctly</li>
+        <li>Simple — no need to calculate DPR or viewport meta injection</li>
+        <li>Touch cursor simulation is natural — just change CSS cursor</li>
+        <li>Zoom level is just the scale factor, easy to show/adjust</li>
+      </ul>
+      <p><strong>Cons:</strong></p>
+      <ul>
+        <li>Scaled content may appear slightly blurry at non-integer scale factors</li>
+      </ul>
+      <p style="margin-top:8px;padding:8px;background:rgba(37,99,235,0.15);border-radius:6px;font-size:13px;">
+        This is how Chrome DevTools does it. The iframe is set to device width/height, then scaled down to fit.
+      </p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>CSS Zoom + Viewport Meta Injection</h3>
+      <p><strong>How:</strong> Resize iframe container to fit available space, inject <code>&lt;meta name="viewport"&gt;</code> into the iframe to trick the page into thinking it's on a smaller screen, use CSS zoom for display scaling.</p>
+      <p><strong>Pros:</strong></p>
+      <ul>
+        <li>Content stays sharp at any size (no transform blur)</li>
+      </ul>
+      <p><strong>Cons:</strong></p>
+      <ul>
+        <li>More complex — need to inject viewport meta into iframe pages</li>
+        <li>CSS zoom behavior varies across browsers</li>
+        <li>Requires modifying the Vite plugin to inject viewport tags dynamically</li>
+        <li>Media queries may not fire as expected</li>
+      </ul>
+    </div>
+  </div>
+</div>

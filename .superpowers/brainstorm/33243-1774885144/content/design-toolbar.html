@@ -1,0 +1,110 @@
+<h2>Design: Device Toolbar</h2>
+<p class="subtitle">The toolbar sits between left panel and right panel, above the iframe</p>
+
+<div class="mockup">
+  <div class="mockup-header">Toolbar Layout</div>
+  <div class="mockup-body" style="padding:0;">
+    <!-- Toolbar mockup -->
+    <div style="display:flex;align-items:center;gap:12px;padding:6px 12px;background:#2d2d30;border-bottom:1px solid #3c3c3c;font-size:13px;color:#ccc;font-family:system-ui;">
+      <!-- Device toggle -->
+      <div style="display:flex;align-items:center;gap:4px;">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="opacity:0.7;">
+          <rect x="3" y="1" width="10" height="14" rx="1.5" stroke="#ccc" stroke-width="1.2" fill="none"/>
+          <circle cx="8" cy="13" r="0.8" fill="#ccc"/>
+        </svg>
+        <span style="color:#4fc3f7;font-size:12px;">Responsive</span>
+      </div>
+
+      <!-- Divider -->
+      <div style="width:1px;height:16px;background:#3c3c3c;"></div>
+
+      <!-- Device select -->
+      <select style="background:#3c3c3c;border:1px solid #555;color:#ccc;padding:2px 8px;border-radius:3px;font-size:12px;">
+        <option>iPhone 14 Pro</option>
+        <option>iPhone SE</option>
+        <option>iPad Air</option>
+        <option>Samsung Galaxy S24</option>
+        <option>Desktop 1920</option>
+      </select>
+
+      <!-- Divider -->
+      <div style="width:1px;height:16px;background:#3c3c3c;"></div>
+
+      <!-- Dimensions -->
+      <div style="display:flex;align-items:center;gap:4px;font-size:12px;">
+        <input style="width:50px;background:#3c3c3c;border:1px solid #555;color:#ccc;padding:2px 4px;border-radius:3px;text-align:center;font-size:11px;" value="393"/>
+        <span style="color:#666;">×</span>
+        <input style="width:50px;background:#3c3c3c;border:1px solid #555;color:#ccc;padding:2px 4px;border-radius:3px;text-align:center;font-size:11px;" value="852"/>
+      </div>
+
+      <!-- Rotate button -->
+      <button style="background:none;border:1px solid #555;color:#ccc;padding:2px 6px;border-radius:3px;cursor:pointer;font-size:14px;" title="Rotate">&#8635;</button>
+
+      <!-- Divider -->
+      <div style="width:1px;height:16px;background:#3c3c3c;"></div>
+
+      <!-- Zoom -->
+      <div style="display:flex;align-items:center;gap:4px;font-size:12px;">
+        <span style="color:#969696;">Zoom:</span>
+        <select style="background:#3c3c3c;border:1px solid #555;color:#ccc;padding:2px 6px;border-radius:3px;font-size:11px;">
+          <option>Auto fit</option>
+          <option>50%</option>
+          <option>75%</option>
+          <option>100%</option>
+          <option>125%</option>
+          <option>150%</option>
+        </select>
+      </div>
+
+      <!-- Spacer -->
+      <div style="flex:1;"></div>
+
+      <!-- DPR indicator -->
+      <span style="font-size:11px;color:#969696;">DPR: 3×</span>
+
+      <!-- Touch cursor toggle -->
+      <button style="background:none;border:1px solid #555;color:#969696;padding:2px 6px;border-radius:3px;cursor:pointer;font-size:12px;" title="Touch cursor">👆</button>
+    </div>
+
+    <!-- Canvas area preview -->
+    <div style="background:repeating-conic-gradient(#1a1a1a 0% 25%, #222 0% 50%) 0 0 / 20px 20px;display:flex;align-items:center;justify-content:center;padding:40px;min-height:300px;">
+      <div style="width:200px;height:380px;background:#fff;border-radius:4px;box-shadow:0 2px 20px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;color:#333;font-size:14px;font-family:system-ui;">
+        iframe<br>393 × 852
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top:24px;">
+  <h3>Toolbar Controls</h3>
+  <table style="width:100%;font-size:14px;border-collapse:collapse;">
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+      <td style="padding:6px 0;color:#4fc3f7;">Responsive toggle</td>
+      <td style="padding:6px 0;">On/off — when off, iframe fills available space (current behavior)</td>
+    </tr>
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+      <td style="padding:6px 0;color:#4fc3f7;">Device dropdown</td>
+      <td style="padding:6px 0;">Preset devices: iPhones, iPads, Android phones, common desktops</td>
+    </tr>
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+      <td style="padding:6px 0;color:#4fc3f7;">Width × Height inputs</td>
+      <td style="padding:6px 0;">Editable — typing custom values switches to "Custom" device</td>
+    </tr>
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+      <td style="padding:6px 0;color:#4fc3f7;">Rotate button</td>
+      <td style="padding:6px 0;">Swaps width ↔ height</td>
+    </tr>
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+      <td style="padding:6px 0;color:#4fc3f7;">Zoom selector</td>
+      <td style="padding:6px 0;">"Auto fit" calculates scale to fit canvas area; manual: 50%–150%</td>
+    </tr>
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+      <td style="padding:6px 0;color:#4fc3f7;">DPR label</td>
+      <td style="padding:6px 0;">Read-only, shows device pixel ratio from preset</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 0;color:#4fc3f7;">Touch cursor</td>
+      <td style="padding:6px 0;">Toggle — when on, iframe shows a circle cursor simulating touch</td>
+    </tr>
+  </table>
+</div>

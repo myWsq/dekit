@@ -54,6 +54,22 @@ When the agent starts the preview server, open the browser to review. Right-clic
 > The hero section $${home@.hero} needs more padding, and make the CTA button blue
 ```
 
+**Initialize in an existing project:**
+
+```
+> Initialize a dekit design project in the design/ directory using the dashboard template
+```
+
+The agent creates a `design/` subdirectory with all the scaffolding, without touching your existing code.
+
+**Build reusable components:**
+
+```
+> Create a ui-card component with an image slot and body slot, then build a showcase page that uses it
+```
+
+The agent creates Web Components with `<template>` + scoped CSS, registers them in `dekit.yaml`, and uses them in pages like `<ui-card>`.
+
 **Add a page to an existing design:**
 
 ```

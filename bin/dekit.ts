@@ -6,13 +6,22 @@ import { startServers } from "../src/server.js";
 
 function printUsage() {
   console.log(`
-Usage: dekit [-c <dekit.yaml>]
+Usage: dekit <command> [options]
+
+Commands:
+  init [path]          Initialize a new design project
+  add <type> <name>    Add a page or component
+  ls                   List pages and components
+  serve                Start the preview server (default)
+  screenshot <ref>     Take a screenshot of a page or element
+  resolve <ref>        Resolve a ref to file path and line range
+  usage                Print the agent usage guide
 
 Options:
-  -c, --config       Path to dekit.yaml (default: ./dekit.yaml or ./dekit.yml)
-  -p, --port         Editor server port (default: 3000)
-  --design-port      Design server port (default: 3001)
-  -h, --help         Show this help message
+  -c, --config         Path to dekit.yaml
+  -h, --help           Show this help message
+
+Run 'dekit <command> --help' for command-specific help.
 `);
 }
 
@@ -23,56 +32,111 @@ function findDefaultConfig(): string | undefined {
   }
 }
 
-function parseArgs(args: string[]) {
-  const result: Record<string, string> = {};
+function extractGlobalArgs(args: string[]): {
+  config?: string;
+  help: boolean;
+  rest: string[];
+} {
+  const rest: string[] = [];
+  let config: string | undefined;
+  let help = false;
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     if (arg === "-c" || arg === "--config") {
-      result.config = args[++i];
-    } else if (arg === "-p" || arg === "--port") {
-      result.port = args[++i];
-    } else if (arg === "--design-port") {
-      result.designPort = args[++i];
+      config = args[++i];
     } else if (arg === "-h" || arg === "--help") {
-      result.help = "true";
+      help = true;
+    } else {
+      rest.push(arg);
     }
   }
-  return result;
+  return { config, help, rest };
 }
 
-async function main() {
-  const args = parseArgs(process.argv.slice(2));
-
-  if (args.help) {
-    printUsage();
-    process.exit(0);
-  }
-
-  const configPath = args.config
-    ? resolve(args.config)
-    : findDefaultConfig();
-
+async function loadConfig(configArg?: string) {
+  const configPath = configArg ? resolve(configArg) : findDefaultConfig();
   if (!configPath) {
     console.error(
       "Error: no dekit.yaml found in current directory. Use -c to specify a config file.\n"
     );
-    printUsage();
     process.exit(1);
   }
-  let config;
   try {
-    config = await parseDesignConfig(configPath);
+    return await parseDesignConfig(configPath);
   } catch (err) {
     console.error(
       `Error parsing config: ${err instanceof Error ? err.message : err}`
     );
     process.exit(1);
   }
+}
 
-  const port = parseInt(args.port ?? "3000", 10);
-  const designPort = parseInt(args.designPort ?? "3001", 10);
+async function main() {
+  const { config: configArg, help, rest } = extractGlobalArgs(
+    process.argv.slice(2)
+  );
+  const command = rest[0] ?? "serve";
+  const commandArgs = rest.slice(1);
 
-  await startServers({ config, port, designPort });
+  if (help && !rest.length) {
+    printUsage();
+    process.exit(0);
+  }
+
+  switch (command) {
+    case "init": {
+      const { runInit } = await import("../src/cli/init.js");
+      await runInit(commandArgs);
+      break;
+    }
+    case "add": {
+      const config = await loadConfig(configArg);
+      const { runAdd } = await import("../src/cli/add.js");
+      await runAdd(config, commandArgs);
+      break;
+    }
+    case "ls": {
+      const config = await loadConfig(configArg);
+      const { runLs } = await import("../src/cli/ls.js");
+      await runLs(config);
+      break;
+    }
+    case "serve": {
+      const config = await loadConfig(configArg);
+      const port = parseInt(
+        commandArgs.find((_, i, a) => a[i - 1] === "-p") ?? "3000",
+        10
+      );
+      const designPort = parseInt(
+        commandArgs.find((_, i, a) => a[i - 1] === "--design-port") ?? "3001",
+        10
+      );
+      const noOpen = commandArgs.includes("--no-open");
+      await startServers({ config, port, designPort, noOpen });
+      break;
+    }
+    case "screenshot": {
+      const config = await loadConfig(configArg);
+      const { runScreenshot } = await import("../src/cli/screenshot.js");
+      await runScreenshot(config, commandArgs);
+      break;
+    }
+    case "resolve": {
+      const config = await loadConfig(configArg);
+      const { runResolve } = await import("../src/cli/resolve.js");
+      await runResolve(config, commandArgs);
+      break;
+    }
+    case "usage": {
+      const { runUsage } = await import("../src/cli/usage.js");
+      await runUsage();
+      break;
+    }
+    default:
+      console.error(`Unknown command: ${command}\n`);
+      printUsage();
+      process.exit(1);
+  }
 }
 
 main();

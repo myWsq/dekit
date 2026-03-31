@@ -6,6 +6,7 @@ export interface ServerOptions {
   config: DesignConfig;
   port: number;
   designPort: number;
+  noOpen?: boolean;
 }
 
 export async function startServers(options: ServerOptions) {
@@ -24,11 +25,13 @@ export async function startServers(options: ServerOptions) {
   console.log(`\n  Open ${editorUrl} in your browser\n`);
 
   // Try to open browser
-  try {
-    const open = await import("open");
-    await open.default(editorUrl);
-  } catch {
-    // Silently ignore if open fails
+  if (!options.noOpen) {
+    try {
+      const open = await import("open");
+      await open.default(editorUrl);
+    } catch {
+      // Silently ignore if open fails
+    }
   }
 
   return { designServer, editorServer };

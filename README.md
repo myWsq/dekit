@@ -50,13 +50,27 @@ Follow the guide to complete your design task.
 
 ## Examples
 
-**Let the agent design from scratch:**
+**Design a landing page:**
 
 ```
 > Use dekit to design a landing page for a task management app
 ```
 
 The agent handles everything — project setup, writing HTML/CSS, taking screenshots to verify, and iterating on the design.
+
+**Design for mobile:**
+
+```
+> Use dekit to design a mobile app for a fitness tracker, use the mobile template
+```
+
+**Add to an existing project:**
+
+```
+> Initialize a dekit design project using the dashboard template
+```
+
+The agent creates a `.dekit/` directory with all the scaffolding, without touching your existing code.
 
 **Review and give feedback:**
 
@@ -66,32 +80,11 @@ When the agent starts the preview server, open the browser to review. Right-clic
 > The hero section $${home@.hero} needs more padding, and make the CTA button blue
 ```
 
-**Initialize in an existing project:**
+**Add pages and components:**
 
 ```
-> Initialize a dekit design project using the dashboard template
-```
-
-The agent creates a `.dekit/` directory with all the scaffolding, without touching your existing code.
-
-**Build reusable components:**
-
-```
-> Create a ui-card component with an image slot and body slot, then build a showcase page that uses it
-```
-
-The agent creates Web Components with `<template>` + scoped CSS and uses them across pages.
-
-**Add a page to an existing design:**
-
-```
-> Add a pricing page to the dekit project with a 3-tier card layout
-```
-
-**Design for mobile:**
-
-```
-> Use dekit to design a mobile app for a fitness tracker, use the mobile template
+> Add a pricing page with a 3-tier card layout
+> Create a ui-card component with an image slot and body slot
 ```
 
 ## License

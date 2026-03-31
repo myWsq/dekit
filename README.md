@@ -1,16 +1,21 @@
 # dekit
 
-A design canvas for AI code agents. Write HTML/CSS, preview, screenshot, iterate.
+A design canvas for AI code agents.
 
-## How It Works
+Agents write HTML/CSS designs, preview and screenshot them, iterate until satisfied — then humans review in the browser and give feedback.
+
+## What It Does
 
 ```
-Agent writes HTML/CSS  →  dekit renders  →  Agent screenshots  →  Agent sees result  →  Repeat
+Agent creates design  →  dekit renders it  →  Agent screenshots to check  →  iterates  →  Human reviews
 ```
 
-Agents use dekit to create visual designs before writing production code. Humans review in the browser and give feedback via ref protocol.
+- Agent scaffolds a design project with built-in templates (landing page, dashboard, mobile app)
+- Agent writes HTML/CSS, takes screenshots to see the result, and self-corrects
+- Human opens the browser preview, inspects elements, and gives feedback using refs
+- Agent resolves the feedback to exact source code locations and iterates
 
-## Quick Start
+## Getting Started
 
 ### 1. Install
 
@@ -37,65 +42,19 @@ Follow the guide to complete your design task.
 > Use dekit to design a landing page for a task management app
 ```
 
-The agent will:
-1. `dekit init --template landing` — scaffold the project
-2. Edit the HTML/CSS files
-3. `dekit screenshot '$${home}'` — take a screenshot to check its work
-4. Iterate until satisfied
-5. `dekit serve` — open for human review
+The agent handles everything — project setup, writing HTML/CSS, taking screenshots to verify, and iterating on the design.
 
-### 4. Review and give feedback
+### 4. Review
 
-Open the browser preview, right-click any element, and **Copy Ref**:
+When the agent is done, it starts the preview server. Open the browser to review.
+
+If something needs changing, right-click any element and **Copy Ref**, then tell the agent:
 
 ```
-> The hero section $${home@.hero} needs more padding, and change the CTA color to blue
+> The hero section $${home@.hero} needs more padding, and make the CTA button blue
 ```
 
-The agent resolves the ref, locates the code, and makes the change.
-
-## CLI
-
-```
-dekit init [path] [--template name]    Create a design project
-dekit add page <name>                  Add a page
-dekit add component <name>             Add a component
-dekit ls                               List pages and components
-dekit serve                            Preview in browser
-dekit screenshot <ref>                 Screenshot a page or element
-dekit resolve <ref>                    Resolve ref to file path + line range
-dekit usage                            Print the full agent usage guide
-```
-
-Templates: `blank`, `landing`, `dashboard`, `mobile` (projects) / `blank`, `hero`, `form`, `grid` (pages)
-
-## Ref Protocol
-
-```
-$${home}              page ref
-$${home@.hero}        element ref (CSS selector)
-```
-
-Agents don't need to understand the protocol — they pass refs to `dekit resolve` or `dekit screenshot`.
-
-## Configuration
-
-`dekit.yaml`:
-
-```yaml
-version: 1.0
-global-style: "global.css"
-
-components:
-  my-card:
-    template: "components/my-card/my-card.html"
-    style: "components/my-card/my-card.css"
-
-pages:
-  home:
-    template: "pages/home/home.html"
-    style: "pages/home/home.css"
-```
+The agent knows how to resolve refs to source code and make the changes.
 
 ## License
 

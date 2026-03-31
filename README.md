@@ -25,7 +25,7 @@ npm install -g dekit-cli
 
 ### 2. Set up your agent
 
-Create a skill file (e.g. `.claude/skills/dekit.md`):
+Create a skill file at `.claude/skills/dekit/SKILL.md`:
 
 ```markdown
 ---

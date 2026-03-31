@@ -4,28 +4,16 @@ A design canvas for AI code agents.
 
 Agents write HTML/CSS designs, preview and screenshot them, iterate until satisfied — then humans review in the browser and give feedback.
 
-## What It Does
+![dekit editor](assets/screenshot.webp)
 
-```
-Agent creates design  →  dekit renders it  →  Agent screenshots to check  →  iterates  →  Human reviews
-```
+## How It Works
 
-- Agent scaffolds a design project with built-in templates (landing page, dashboard, mobile app)
-- Agent writes HTML/CSS, takes screenshots to see the result, and self-corrects
-- Human opens the browser preview, inspects elements, and gives feedback using refs
-- Agent resolves the feedback to exact source code locations and iterates
+1. **Agent designs** — scaffolds a project, writes HTML/CSS, takes screenshots to self-check
+2. **Human reviews** — opens the browser preview, inspects elements, right-clicks to **Copy Ref**
+3. **Human gives feedback** — pastes the ref in terminal with instructions
+4. **Agent iterates** — resolves the ref to source code, makes changes, screenshots to verify
 
-All design files live inside a `.dekit/` directory, keeping your project clean:
-
-```
-your-project/
-└── .dekit/
-    ├── dekit.yaml          ← config
-    ├── global.css
-    ├── pages/
-    ├── components/
-    └── screenshots/
-```
+All design files live inside a `.dekit/` directory, keeping your project clean.
 
 ## Getting Started
 
@@ -48,15 +36,13 @@ Run `dekit usage` to get the full usage guide.
 Follow the guide to complete your design task.
 ```
 
-## Examples
-
-**Design a landing page:**
+### 3. Try it
 
 ```
 > Use dekit to design a landing page for a task management app
 ```
 
-The agent handles everything — project setup, writing HTML/CSS, taking screenshots to verify, and iterating on the design.
+## Examples
 
 **Design for mobile:**
 
@@ -70,11 +56,9 @@ The agent handles everything — project setup, writing HTML/CSS, taking screens
 > Initialize a dekit design project using the dashboard template
 ```
 
-The agent creates a `.dekit/` directory with all the scaffolding, without touching your existing code.
-
 **Review and give feedback:**
 
-When the agent starts the preview server, open the browser to review. Right-click any element and **Copy Ref**, then tell the agent what to change:
+Right-click any element in the preview and **Copy Ref**, then tell the agent:
 
 ```
 > The hero section $${home@.hero} needs more padding, and make the CTA button blue

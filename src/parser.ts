@@ -14,11 +14,11 @@ export async function parseDesignConfig(
   const doc = yaml.load(content) as Record<string, unknown>;
 
   if (!doc || typeof doc !== "object") {
-    throw new Error("Invalid design.yaml: not a valid YAML object");
+    throw new Error("Invalid config: not a valid YAML object");
   }
 
   if (doc.version == null) {
-    throw new Error("Invalid design.yaml: missing 'version' field");
+    throw new Error("Invalid config: missing 'version' field");
   }
 
   // Validate file paths if the base directory actually exists on disk

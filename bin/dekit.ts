@@ -6,10 +6,10 @@ import { startServers } from "../src/server.js";
 
 function printUsage() {
   console.log(`
-Usage: dekit [-c <design.yaml>]
+Usage: dekit [-c <dekit.yaml>]
 
 Options:
-  -c, --config       Path to design.yaml (default: ./design.yaml or ./design.yml)
+  -c, --config       Path to dekit.yaml (default: ./dekit.yaml or ./dekit.yml)
   -p, --port         Editor server port (default: 3000)
   --design-port      Design server port (default: 3001)
   -h, --help         Show this help message
@@ -17,7 +17,7 @@ Options:
 }
 
 function findDefaultConfig(): string | undefined {
-  for (const name of ["design.yaml", "design.yml"]) {
+  for (const name of ["dekit.yaml", "dekit.yml", "design.yaml", "design.yml"]) {
     const p = resolve(name);
     if (existsSync(p)) return p;
   }
@@ -54,7 +54,7 @@ async function main() {
 
   if (!configPath) {
     console.error(
-      "Error: no design.yaml or design.yml found in current directory. Use -c to specify a config file.\n"
+      "Error: no dekit.yaml found in current directory. Use -c to specify a config file.\n"
     );
     printUsage();
     process.exit(1);

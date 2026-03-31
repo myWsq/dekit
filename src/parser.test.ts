@@ -5,8 +5,8 @@ import { join } from "node:path";
 const DESIGN_DIR = join(import.meta.dirname, "../example");
 
 describe("parseDesignConfig", () => {
-  test("parses valid design.yaml", async () => {
-    const config = await parseDesignConfig(join(DESIGN_DIR, "design.yaml"));
+  test("parses valid dekit.yaml", async () => {
+    const config = await parseDesignConfig(join(DESIGN_DIR, "dekit.yaml"));
     expect(config.version).toBe(1.0);
     expect(config.globalStyle).toBe("global.css");
     expect(config.components["my-banner"]).toEqual({
@@ -21,7 +21,7 @@ describe("parseDesignConfig", () => {
   });
 
   test("stores resolved base directory", async () => {
-    const config = await parseDesignConfig(join(DESIGN_DIR, "design.yaml"));
+    const config = await parseDesignConfig(join(DESIGN_DIR, "dekit.yaml"));
     expect(config.baseDir).toBe(DESIGN_DIR);
   });
 
@@ -36,7 +36,7 @@ components:
 pages: {}
 `;
     await expect(
-      parseDesignConfig("/fake/design.yaml", yaml)
+      parseDesignConfig("/fake/dekit.yaml", yaml)
     ).rejects.toThrow(/hyphen/i);
   });
 
@@ -51,7 +51,7 @@ pages:
     style: "pages/cover/cover.css"
 `;
     await expect(
-      parseDesignConfig(join(DESIGN_DIR, "design.yaml"), yaml)
+      parseDesignConfig(join(DESIGN_DIR, "dekit.yaml"), yaml)
     ).rejects.toThrow(/not found|does not exist/i);
   });
 
@@ -62,7 +62,7 @@ components: {}
 pages: {}
 `;
     await expect(
-      parseDesignConfig("/fake/design.yaml", yaml)
+      parseDesignConfig("/fake/dekit.yaml", yaml)
     ).rejects.toThrow(/version/i);
   });
 });

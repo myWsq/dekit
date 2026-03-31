@@ -15,6 +15,18 @@ Agent creates design  →  dekit renders it  →  Agent screenshots to check  �
 - Human opens the browser preview, inspects elements, and gives feedback using refs
 - Agent resolves the feedback to exact source code locations and iterates
 
+All design files live inside a `.dekit/` directory, keeping your project clean:
+
+```
+your-project/
+└── .dekit/
+    ├── dekit.yaml          ← config
+    ├── global.css
+    ├── pages/
+    ├── components/
+    └── screenshots/
+```
+
 ## Getting Started
 
 ### 1. Install
@@ -57,10 +69,10 @@ When the agent starts the preview server, open the browser to review. Right-clic
 **Initialize in an existing project:**
 
 ```
-> Initialize a dekit design project in the design/ directory using the dashboard template
+> Initialize a dekit design project using the dashboard template
 ```
 
-The agent creates a `design/` subdirectory with all the scaffolding, without touching your existing code.
+The agent creates a `.dekit/` directory with all the scaffolding, without touching your existing code.
 
 **Build reusable components:**
 
@@ -68,7 +80,7 @@ The agent creates a `design/` subdirectory with all the scaffolding, without tou
 > Create a ui-card component with an image slot and body slot, then build a showcase page that uses it
 ```
 
-The agent creates Web Components with `<template>` + scoped CSS, registers them in `dekit.yaml`, and uses them in pages like `<ui-card>`.
+The agent creates Web Components with `<template>` + scoped CSS and uses them across pages.
 
 **Add a page to an existing design:**
 

@@ -1,0 +1,18 @@
+version: 1.0
+global-style: "global.css"
+
+components:
+  ui-card:
+    template: "components/ui-card/ui-card.html"
+    style: "components/ui-card/ui-card.css"
+  ui-button:
+    template: "components/ui-button/ui-button.html"
+    style: "components/ui-button/ui-button.css"
+
+pages:
+  home:
+    template: "pages/home/home.html"
+    style: "pages/home/home.css"
+  showcase:
+    template: "pages/showcase/showcase.html"
+    style: "pages/showcase/showcase.css"

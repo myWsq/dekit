@@ -1,11 +1,12 @@
 ---
 name: release
-description: Bump version, generate release notes, tag, push, and create a GitHub Release. Usage: /release <patch|minor|major>
+description: Use when publishing a new version of the package
+argument-hint: <patch|minor|major>
 ---
 
 # Release
 
-Automate the release process for dekit.
+Automate the release process for dekit-cli.
 
 **Argument:** `patch`, `minor`, or `major` (required). This determines how the version number is bumped following semver.
 
@@ -90,12 +91,26 @@ git push --tags
 gh release create v<new-version> --title "v<new-version>" --notes "<release-notes-from-step-5>"
 ```
 
-### 9. Confirm
+### 9. Wait for publish workflow
+
+The `v*` tag will trigger the Publish workflow. Poll until it completes:
+
+```bash
+gh run list --branch v<new-version> --workflow Publish --limit 1 --json status,conclusion
+```
+
+Poll every 15 seconds. If the workflow fails, print the failed logs and stop:
+
+```bash
+gh run view <run-id> --log-failed
+```
+
+### 10. Confirm
 
 Print a summary:
 
 ```
 Released v<new-version>
 - GitHub Release: https://github.com/<owner>/<repo>/releases/tag/v<new-version>
-- npm publish will be triggered by the v* tag via GitHub Actions
+- npm: https://www.npmjs.com/package/dekit-cli/v/<new-version>
 ```

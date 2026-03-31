@@ -11,13 +11,14 @@ Commands:
   init [path]          Initialize a new design project
   add <type> <name>    Add a page or component
   ls                   List pages and components
-  serve                Start the preview server (default)
+  serve                Start the preview server (default, port 7980)
   screenshot <ref>     Take a screenshot of a page or element
   resolve <ref>        Resolve a ref to file path and line range
   usage                Print the agent usage guide
 
 Options:
   -c, --config         Path to dekit.yaml
+  -p, --port           Editor server port (default: 7980)
   -h, --help           Show this help message
 
 Run 'dekit <command> --help' for command-specific help.
@@ -102,16 +103,10 @@ async function main() {
     }
     case "serve": {
       const config = await loadConfig(configArg);
-      const port = parseInt(
-        commandArgs.find((_, i, a) => a[i - 1] === "-p") ?? "3000",
-        10
-      );
-      const designPort = parseInt(
-        commandArgs.find((_, i, a) => a[i - 1] === "--design-port") ?? "3001",
-        10
-      );
+      const portArg = commandArgs.find((_, i, a) => a[i - 1] === "-p");
+      const port = portArg ? parseInt(portArg, 10) : undefined;
       const noOpen = commandArgs.includes("--no-open");
-      await startServers({ config, port, designPort, noOpen });
+      await startServers({ config, port, noOpen });
       break;
     }
     case "screenshot": {

@@ -1,4 +1,46 @@
+import { existsSync, mkdirSync, cpSync } from "node:fs";
+import { resolve, join } from "node:path";
+
+const TEMPLATES_DIR = join(import.meta.dirname, "../../templates/projects");
+
+const AVAILABLE_TEMPLATES = ["blank", "landing", "dashboard", "mobile"];
+
 export async function runInit(args: string[]) {
-  console.error("dekit init: not yet implemented");
-  process.exit(1);
+  let targetDir = process.cwd();
+  let template = "blank";
+
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (arg === "--template") {
+      const next = args[i + 1];
+      if (!next || next.startsWith("-")) {
+        console.log("Available templates: " + AVAILABLE_TEMPLATES.join(", "));
+        return;
+      }
+      template = next;
+      i++;
+    } else if (!arg.startsWith("-")) {
+      targetDir = resolve(arg);
+    }
+  }
+
+  if (!AVAILABLE_TEMPLATES.includes(template)) {
+    throw new Error(
+      `Unknown template: "${template}". Available: ${AVAILABLE_TEMPLATES.join(", ")}`
+    );
+  }
+
+  if (existsSync(join(targetDir, "dekit.yaml"))) {
+    throw new Error(`dekit.yaml already exists in ${targetDir}`);
+  }
+
+  const templateDir = join(TEMPLATES_DIR, template);
+  if (!existsSync(templateDir)) {
+    throw new Error(`Template directory not found: ${templateDir}`);
+  }
+
+  mkdirSync(targetDir, { recursive: true });
+  cpSync(templateDir, targetDir, { recursive: true });
+
+  console.log(`Created dekit project in ${targetDir} (template: ${template})`);
 }

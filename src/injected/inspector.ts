@@ -155,6 +155,36 @@ export function generateInspectorScript(): string {
     return parts.join('/');
   }
 
+  function generateCssSelector(el) {
+      if (el.id) return '#' + el.id;
+      if (el.classList && el.classList.length > 0) {
+        for (var i = 0; i < el.classList.length; i++) {
+          var cls = el.classList[i];
+          if (document.querySelectorAll('.' + cls).length === 1) {
+            return '.' + cls;
+          }
+        }
+      }
+      var parts = [];
+      var cur = el;
+      while (cur && cur !== document.body && cur !== document.documentElement) {
+        var parent = cur.parentElement;
+        if (!parent) break;
+        var tag = cur.tagName.toLowerCase();
+        var siblings = [];
+        for (var j = 0; j < parent.children.length; j++) {
+          if (parent.children[j].tagName === cur.tagName) siblings.push(parent.children[j]);
+        }
+        if (siblings.length === 1) {
+          parts.unshift(tag);
+        } else {
+          parts.unshift(tag + ':nth-of-type(' + (siblings.indexOf(cur) + 1) + ')');
+        }
+        cur = parent;
+      }
+      return parts.join(' > ');
+    }
+
   function getNodeInfo(node) {
     const computed = getComputedStyle(node);
     const rect = node.getBoundingClientRect();
@@ -177,6 +207,7 @@ export function generateInspectorScript(): string {
     return {
       tagName: node.tagName.toLowerCase(),
       path: getNodePath(node),
+      cssSelector: generateCssSelector(node),
       attributes: attrs,
       computedStyles: styles,
       boundingRect: { x: rect.x, y: rect.y, width: rect.width, height: rect.height }

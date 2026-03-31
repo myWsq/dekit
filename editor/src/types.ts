@@ -1,6 +1,7 @@
 export interface NodeInfo {
   tagName: string;
   path: string;
+  cssSelector: string;
   attributes: Record<string, string>;
   computedStyles: Record<string, string>;
   boundingRect: { x: number; y: number; width: number; height: number };

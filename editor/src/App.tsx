@@ -33,20 +33,18 @@ export function App() {
   const currentPageRef = useRef("");
   const canvasAreaRef = useRef<HTMLDivElement>(null);
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; domPath?: string; page: string } | null>(null);
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; cssSelector?: string; page: string } | null>(null);
   const [focusedPanel, setFocusedPanel] = useState<"pages" | "layers" | null>(null);
 
   const configRef = useRef<EditorConfig | null>(null);
   configRef.current = config;
 
   const getPageRef = useCallback((page: string) => {
-    const filePath = configRef.current?.pagePaths?.[page] ?? page;
-    return "$$" + "{" + filePath + "}";
+    return "$$" + "{" + page + "}";
   }, []);
 
-  const getNodeRef = useCallback((page: string, domPath: string) => {
-    const filePath = configRef.current?.pagePaths?.[page] ?? page;
-    return "$$" + "{" + filePath + "#" + domPath + "}";
+  const getNodeRef = useCallback((page: string, cssSelector: string) => {
+    return "$$" + "{" + page + "@" + cssSelector + "}";
   }, []);
 
   // Fetch config
@@ -70,7 +68,7 @@ export function App() {
         setSelectedNode(msg.node);
         setSelectedPath(msg.node.path);
         if (inspectModeRef.current && currentPageRef.current) {
-          navigator.clipboard.writeText(getNodeRef(currentPageRef.current, msg.node.path));
+          navigator.clipboard.writeText(getNodeRef(currentPageRef.current, msg.node.cssSelector));
           iframeRef.current?.contentWindow?.postMessage({ type: "COPY_FEEDBACK" }, "*");
         }
       } else if (msg.type === "DOM_TREE") {
@@ -372,7 +370,7 @@ export function App() {
                     setFocusedPanel("layers");
                   }}
                   onHover={handleLayerHover}
-                  onContextMenu={(domPath, x, y) => setContextMenu({ x, y, domPath, page: currentPage })}
+                  onContextMenu={(cssSelector, x, y) => setContextMenu({ x, y, cssSelector, page: currentPage })}
                 />
               ))}
             </div>
@@ -382,7 +380,7 @@ export function App() {
           <div className="panel-header">Properties</div>
           <OverlayScrollbarsComponent className="properties-scroll" defer>
             {selectedNode ? (
-              <PropertyPanel node={selectedNode} nodeRef={getNodeRef(currentPage, selectedNode.path)} />
+              <PropertyPanel node={selectedNode} nodeRef={getNodeRef(currentPage, selectedNode.cssSelector)} />
             ) : (
               <div className="empty-state">Select an element to inspect</div>
             )}
@@ -396,11 +394,11 @@ export function App() {
           style={{ left: contextMenu.x, top: contextMenu.y }}
           onClick={(e) => e.stopPropagation()}
         >
-          {contextMenu.domPath && (
+          {contextMenu.cssSelector && (
             <div
               className="context-menu-item"
               onClick={() => {
-                navigator.clipboard.writeText(getNodeRef(contextMenu.page, contextMenu.domPath!));
+                navigator.clipboard.writeText(getNodeRef(contextMenu.page, contextMenu.cssSelector!));
                 setContextMenu(null);
               }}
             >

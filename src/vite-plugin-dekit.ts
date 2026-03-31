@@ -7,7 +7,8 @@ import { generateInspectorScript } from "./injected/inspector.js";
 
 export async function assemblePageHtml(
   config: DesignConfig,
-  pageName: string
+  pageName: string,
+  options?: { inspector?: boolean }
 ): Promise<string> {
   const pageDef = config.pages[pageName];
   if (!pageDef) {
@@ -22,7 +23,11 @@ export async function assemblePageHtml(
     config.components,
     config.baseDir
   );
-  const inspectorScript = generateInspectorScript();
+
+  const includeInspector = options?.inspector !== false;
+  const inspectorBlock = includeInspector
+    ? `<script>\n${generateInspectorScript()}\n</script>`
+    : "";
 
   return `<!DOCTYPE html>
 <html>
@@ -37,9 +42,7 @@ ${pageTemplate}
 <script type="module">
 ${componentScript}
 </script>
-<script>
-${inspectorScript}
-</script>
+${inspectorBlock}
 </body>
 </html>`;
 }
@@ -79,8 +82,12 @@ export function dekitPlugin(configRef: { current: DesignConfig }): Plugin {
         const pageMatch = url.match(/^\/page\/([^/?#]+)/);
         if (pageMatch) {
           const pageName = pageMatch[1];
+          const urlObj = new URL(url, "http://localhost");
+          const noInspector = urlObj.searchParams.has("noinspector");
           try {
-            const html = await assemblePageHtml(configRef.current, pageName);
+            const html = await assemblePageHtml(configRef.current, pageName, {
+              inspector: !noInspector,
+            });
             res.setHeader("Content-Type", "text/html");
             res.end(html);
           } catch (err) {

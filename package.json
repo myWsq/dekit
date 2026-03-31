@@ -8,7 +8,7 @@
   "repository": { "type": "git", "url": "https://github.com/myWsq/dekit" },
   "homepage": "https://github.com/myWsq/dekit",
   "bugs": { "url": "https://github.com/myWsq/dekit/issues" },
-  "files": ["bin/", "src/", "editor/", "dist/"],
+  "files": ["bin/", "src/", "editor/", "dist/", "templates/", "docs/usage.md"],
   "engines": { "node": ">=18" },
   "bin": {
     "dekit": "./bin/dekit.ts"

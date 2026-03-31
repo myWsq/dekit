@@ -1,0 +1,9 @@
+version: 1.0
+global-style: "global.css"
+
+components: {}
+
+pages:
+  home:
+    template: "pages/home/home.html"
+    style: "pages/home/home.css"

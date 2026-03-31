@@ -1,0 +1,100 @@
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar__logo">
+      <span class="sidebar__logo-icon">&#9670;</span>
+      <span class="sidebar__logo-text">Dashboard</span>
+    </div>
+    <nav class="sidebar__nav">
+      <a href="#" class="nav-item nav-item--active">
+        <span class="nav-item__icon">&#9632;</span>
+        <span class="nav-item__label">Overview</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-item__icon">&#128200;</span>
+        <span class="nav-item__label">Analytics</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-item__icon">&#128179;</span>
+        <span class="nav-item__label">Revenue</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-item__icon">&#128101;</span>
+        <span class="nav-item__label">Users</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-item__icon">&#9881;</span>
+        <span class="nav-item__label">Settings</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main">
+    <!-- Topbar -->
+    <header class="topbar">
+      <h1 class="topbar__title">Overview</h1>
+      <div class="topbar__actions">
+        <button class="topbar__btn">Export</button>
+        <div class="topbar__avatar">JD</div>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <p class="stat-card__label">Total Revenue</p>
+          <p class="stat-card__value">$48,295</p>
+          <p class="stat-card__change stat-card__change--up">+12.5% this month</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__label">Active Users</p>
+          <p class="stat-card__value">3,842</p>
+          <p class="stat-card__change stat-card__change--up">+8.1% this month</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__label">New Signups</p>
+          <p class="stat-card__value">214</p>
+          <p class="stat-card__change stat-card__change--down">-3.2% this month</p>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="section-card">
+        <h2 class="section-card__title">Recent Activity</h2>
+        <table class="activity-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Event</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Alice Johnson</td>
+              <td>Signed up</td>
+              <td>Jan 12, 2025</td>
+              <td><span class="badge badge--green">Active</span></td>
+            </tr>
+            <tr>
+              <td>Bob Smith</td>
+              <td>Upgraded plan</td>
+              <td>Jan 11, 2025</td>
+              <td><span class="badge badge--blue">Pro</span></td>
+            </tr>
+            <tr>
+              <td>Carol White</td>
+              <td>Cancelled</td>
+              <td>Jan 10, 2025</td>
+              <td><span class="badge badge--gray">Inactive</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

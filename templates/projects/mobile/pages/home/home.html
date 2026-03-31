@@ -1,0 +1,110 @@
+<div class="app">
+  <!-- App Header -->
+  <header class="app-header">
+    <button class="app-header__menu" aria-label="Menu">&#9776;</button>
+    <h1 class="app-header__title">Home</h1>
+    <button class="app-header__action" aria-label="Notifications">&#128276;</button>
+  </header>
+
+  <!-- Scrollable Content -->
+  <main class="app-content">
+    <!-- Greeting -->
+    <div class="greeting">
+      <p class="greeting__sub">Good morning,</p>
+      <h2 class="greeting__name">Alex</h2>
+    </div>
+
+    <!-- Summary Card -->
+    <div class="summary-card">
+      <p class="summary-card__label">Total Balance</p>
+      <p class="summary-card__value">$2,450.00</p>
+      <div class="summary-card__row">
+        <div class="summary-card__stat">
+          <span class="summary-card__stat-icon summary-card__stat-icon--up">&#8593;</span>
+          <span class="summary-card__stat-label">Income</span>
+          <span class="summary-card__stat-val">$3,200</span>
+        </div>
+        <div class="summary-card__divider"></div>
+        <div class="summary-card__stat">
+          <span class="summary-card__stat-icon summary-card__stat-icon--down">&#8595;</span>
+          <span class="summary-card__stat-label">Expenses</span>
+          <span class="summary-card__stat-val">$750</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <button class="quick-action">
+        <span class="quick-action__icon">&#128197;</span>
+        <span class="quick-action__label">Schedule</span>
+      </button>
+      <button class="quick-action">
+        <span class="quick-action__icon">&#128200;</span>
+        <span class="quick-action__label">Stats</span>
+      </button>
+      <button class="quick-action">
+        <span class="quick-action__icon">&#128179;</span>
+        <span class="quick-action__label">Pay</span>
+      </button>
+      <button class="quick-action">
+        <span class="quick-action__icon">&#9881;</span>
+        <span class="quick-action__label">Settings</span>
+      </button>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="section">
+      <div class="section__header">
+        <h3 class="section__title">Recent Activity</h3>
+        <a href="#" class="section__link">See all</a>
+      </div>
+      <div class="activity-list">
+        <div class="activity-item">
+          <div class="activity-item__icon">&#127829;</div>
+          <div class="activity-item__info">
+            <p class="activity-item__name">Food &amp; Dining</p>
+            <p class="activity-item__date">Today, 12:30 PM</p>
+          </div>
+          <p class="activity-item__amount activity-item__amount--neg">-$24.50</p>
+        </div>
+        <div class="activity-item">
+          <div class="activity-item__icon">&#128188;</div>
+          <div class="activity-item__info">
+            <p class="activity-item__name">Salary Deposit</p>
+            <p class="activity-item__date">Yesterday</p>
+          </div>
+          <p class="activity-item__amount activity-item__amount--pos">+$3,200</p>
+        </div>
+        <div class="activity-item">
+          <div class="activity-item__icon">&#128722;</div>
+          <div class="activity-item__info">
+            <p class="activity-item__name">Online Shopping</p>
+            <p class="activity-item__date">Jan 9, 2025</p>
+          </div>
+          <p class="activity-item__amount activity-item__amount--neg">-$89.00</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Tab Bar -->
+  <nav class="tab-bar">
+    <a href="#" class="tab-item tab-item--active">
+      <span class="tab-item__icon">&#9632;</span>
+      <span class="tab-item__label">Home</span>
+    </a>
+    <a href="#" class="tab-item">
+      <span class="tab-item__icon">&#128200;</span>
+      <span class="tab-item__label">Stats</span>
+    </a>
+    <a href="#" class="tab-item">
+      <span class="tab-item__icon">&#128179;</span>
+      <span class="tab-item__label">Pay</span>
+    </a>
+    <a href="#" class="tab-item">
+      <span class="tab-item__icon">&#128101;</span>
+      <span class="tab-item__label">Profile</span>
+    </a>
+  </nav>
+</div>

@@ -354,7 +354,7 @@ export function generateInspectorScript(): string {
       }
     } else if (msg.type === 'SET_INSPECT_MODE') {
       inspectEnabled = !!msg.enabled;
-      if (!inspectEnabled) {
+      if (!inspectEnabled && !frozen) {
         hideOverlay();
       }
     } else if (msg.type === 'SET_PAGE_NAME') {

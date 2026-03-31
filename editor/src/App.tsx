@@ -617,10 +617,20 @@ function LayerTreeNode({
   onHover: (path: string | null) => void;
   onContextMenu: (path: string, x: number, y: number) => void;
 }) {
+  const isSelected = node.path === selectedPath;
+  const ref = useCallback(
+    (el: HTMLDivElement | null) => {
+      if (el && isSelected) {
+        el.scrollIntoView({ block: "nearest" });
+      }
+    },
+    [isSelected]
+  );
   return (
     <>
       <div
-        className={`layer-node ${node.path === selectedPath ? "selected" : ""}`}
+        ref={ref}
+        className={`layer-node ${isSelected ? "selected" : ""}`}
         style={{ paddingLeft: 12 + depth * 16 }}
         onClick={() => onSelect(node.path)}
         onMouseEnter={() => onHover(node.path)}

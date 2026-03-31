@@ -8,4 +8,10 @@ export default defineConfig({
     outDir: "../dist/editor",
     emptyOutDir: true,
   },
+  server: {
+    port: 5173,
+    proxy: {
+      "/api": "http://localhost:7980",
+    },
+  },
 });

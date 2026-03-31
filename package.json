@@ -38,7 +38,8 @@
     "dekit": "./bin/dekit.js"
   },
   "scripts": {
-    "dev": "node --import tsx bin/dekit.ts",
+    "dev": "node --import tsx bin/dekit.ts serve -c example/dekit.yaml",
+    "dev:editor": "vite dev --config editor/vite.config.ts",
     "build:editor": "vite build --config editor/vite.config.ts",
     "test": "vitest run",
     "prepublishOnly": "npm run build:editor"

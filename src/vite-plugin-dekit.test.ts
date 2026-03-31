@@ -9,15 +9,23 @@ const mockConfig: DesignConfig = {
   version: 1.0,
   globalStyle: "global.css",
   components: {
-    "my-banner": {
-      template: "components/my-banner/banner.html",
-      style: "components/my-banner/banner.css",
+    "ui-card": {
+      template: "components/ui-card/ui-card.html",
+      style: "components/ui-card/ui-card.css",
+    },
+    "ui-button": {
+      template: "components/ui-button/ui-button.html",
+      style: "components/ui-button/ui-button.css",
     },
   },
   pages: {
-    cover: {
-      template: "pages/cover/cover.html",
-      style: "pages/cover/cover.css",
+    home: {
+      template: "pages/home/home.html",
+      style: "pages/home/home.css",
+    },
+    showcase: {
+      template: "pages/showcase/showcase.html",
+      style: "pages/showcase/showcase.css",
     },
   },
   baseDir: DESIGN_DIR,
@@ -25,13 +33,12 @@ const mockConfig: DesignConfig = {
 
 describe("assemblePageHtml", () => {
   test("generates valid HTML for a page", async () => {
-    const html = await assemblePageHtml(mockConfig, "cover");
+    const html = await assemblePageHtml(mockConfig, "home");
     expect(html).toContain("<!DOCTYPE html>");
     expect(html).toContain("global.css");
-    expect(html).toContain("pages/cover/cover.css");
-    expect(html).toContain("Welcome to Dekit");
+    expect(html).toContain("pages/home/home.css");
     expect(html).toContain("customElements.define");
-    expect(html).toContain("my-banner");
+    expect(html).toContain("ui-card");
   });
 
   test("throws for unknown page", async () => {
@@ -41,14 +48,14 @@ describe("assemblePageHtml", () => {
   });
 
   test("includes inspector script", async () => {
-    const html = await assemblePageHtml(mockConfig, "cover");
+    const html = await assemblePageHtml(mockConfig, "home");
     expect(html).toContain("postMessage");
     expect(html).toContain("NODE_SELECTED");
   });
 
   test("extracts template inner content for component registration", async () => {
-    const html = await assemblePageHtml(mockConfig, "cover");
-    expect(html).toContain("class=\"banner\"");
+    const html = await assemblePageHtml(mockConfig, "showcase");
+    expect(html).toContain("class=\"card\"");
     expect(html).toContain("<slot></slot>");
     expect(html).not.toMatch(/innerHTML\s*=\s*`\s*<template>/);
   });

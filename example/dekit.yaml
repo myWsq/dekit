@@ -2,14 +2,17 @@ version: 1.0
 global-style: "global.css"
 
 components:
-  my-banner:
-    template: "components/my-banner/banner.html"
-    style: "components/my-banner/banner.css"
+  ui-card:
+    template: "components/ui-card/ui-card.html"
+    style: "components/ui-card/ui-card.css"
+  ui-button:
+    template: "components/ui-button/ui-button.html"
+    style: "components/ui-button/ui-button.css"
 
 pages:
-  cover:
-    template: "pages/cover/cover.html"
-    style: "pages/cover/cover.css"
-  example:
-    template: "pages/example/example.html"
-    style: "pages/example/example.css"
+  home:
+    template: "pages/home/home.html"
+    style: "pages/home/home.css"
+  showcase:
+    template: "pages/showcase/showcase.html"
+    style: "pages/showcase/showcase.css"

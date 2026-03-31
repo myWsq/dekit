@@ -9,15 +9,15 @@ describe("parseDesignConfig", () => {
     const config = await parseDesignConfig(join(DESIGN_DIR, "dekit.yaml"));
     expect(config.version).toBe(1.0);
     expect(config.globalStyle).toBe("global.css");
-    expect(config.components["my-banner"]).toEqual({
-      template: "components/my-banner/banner.html",
-      style: "components/my-banner/banner.css",
+    expect(config.components["ui-card"]).toEqual({
+      template: "components/ui-card/ui-card.html",
+      style: "components/ui-card/ui-card.css",
     });
-    expect(config.pages["cover"]).toEqual({
-      template: "pages/cover/cover.html",
-      style: "pages/cover/cover.css",
+    expect(config.pages["home"]).toEqual({
+      template: "pages/home/home.html",
+      style: "pages/home/home.css",
     });
-    expect(config.pages["example"]).toBeDefined();
+    expect(config.pages["showcase"]).toBeDefined();
   });
 
   test("stores resolved base directory", async () => {

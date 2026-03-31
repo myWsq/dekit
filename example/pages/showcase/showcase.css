@@ -1,0 +1,58 @@
+.showcase {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.showcase h1 {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #6b7280;
+  margin-bottom: 48px;
+}
+
+.section {
+  margin-bottom: 48px;
+}
+
+.section h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.card-grid h3 {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.card-grid p {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+.placeholder-img {
+  height: 120px;
+  background: linear-gradient(135deg, #e5e7eb 0%, #f3f4f6 100%);
+}
+
+.placeholder-img.accent {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}

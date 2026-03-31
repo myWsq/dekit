@@ -33,8 +33,6 @@ async function findAvailablePort(preferred: number): Promise<number> {
 export async function startServers(options: ServerOptions) {
   const configRef = { current: options.config };
 
-  console.log("\n  Dekit Dev Server\n");
-
   const designServer = await startDesignServer(configRef);
   const designAddr = designServer.httpServer!.address();
   const designPort =
@@ -48,7 +46,7 @@ export async function startServers(options: ServerOptions) {
   );
 
   const editorUrl = `http://localhost:${editorPort}`;
-  console.log(`\n  Open ${editorUrl} in your browser\n`);
+  console.log(`\n  Dekit running at ${editorUrl}\n`);
 
   // Try to open browser
   if (!options.noOpen) {

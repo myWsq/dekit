@@ -62,7 +62,6 @@ export async function startEditorServer(
 
   return new Promise((resolve) => {
     server.listen(port, () => {
-      console.log(`  Editor server running at http://localhost:${port}`);
       resolve(server);
     });
   });

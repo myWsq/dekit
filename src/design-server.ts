@@ -20,6 +20,5 @@ export async function startDesignServer(
   await server.listen();
   const address = server.httpServer!.address();
   const port = typeof address === "object" && address ? address.port : 0;
-  console.log(`  Design server running at http://localhost:${port}`);
   return server;
 }

@@ -67,10 +67,6 @@ export function App() {
       if (msg.type === "NODE_SELECTED") {
         setSelectedNode(msg.node);
         setSelectedPath(msg.node.path);
-        if (inspectModeRef.current && currentPageRef.current) {
-          navigator.clipboard.writeText(getNodeRef(currentPageRef.current, msg.node.cssSelector));
-          iframeRef.current?.contentWindow?.postMessage({ type: "COPY_FEEDBACK" }, "*");
-        }
       } else if (msg.type === "DOM_TREE") {
         setDomTree(msg.tree);
       } else if (msg.type === "INSPECT_KEY") {

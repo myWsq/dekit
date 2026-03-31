@@ -4,6 +4,7 @@ export function generateInspectorScript(): string {
   let overlay = null;
   let selectedNode = null;
   let inspectEnabled = false;
+  let frozen = false;
   let pageName = '';
 
   function isOverlayEl(el) {
@@ -246,6 +247,12 @@ export function generateInspectorScript(): string {
   }
 
   document.addEventListener('click', function(e) {
+    if (frozen) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.parent.postMessage({ type: 'DISMISS_CONTEXT_MENU' }, '*');
+      return;
+    }
     if (!inspectEnabled) return;
     e.preventDefault();
     e.stopPropagation();
@@ -261,8 +268,9 @@ export function generateInspectorScript(): string {
     var node = e.target;
     if (isOverlayEl(node)) return;
     selectedNode = node;
+    frozen = true;
+    showOverlay(node);
     var info = getNodeInfo(node);
-    var rect = node.getBoundingClientRect();
     window.parent.postMessage({
       type: 'CONTEXT_MENU',
       node: info,
@@ -272,7 +280,7 @@ export function generateInspectorScript(): string {
   }, true);
 
   document.addEventListener('mouseover', function(e) {
-    if (!inspectEnabled) return;
+    if (frozen || !inspectEnabled) return;
     const node = e.target;
     if (isOverlayEl(node)) return;
     showOverlay(node);
@@ -281,7 +289,7 @@ export function generateInspectorScript(): string {
   }, true);
 
   document.addEventListener('mouseout', function(e) {
-    if (!inspectEnabled) return;
+    if (frozen || !inspectEnabled) return;
     const related = e.relatedTarget;
     if (related && isOverlayEl(related)) return;
     hideOverlay();
@@ -332,6 +340,11 @@ export function generateInspectorScript(): string {
         }
       } else {
         if (touchStyle) touchStyle.remove();
+      }
+    } else if (msg.type === 'SET_FROZEN') {
+      frozen = !!msg.enabled;
+      if (!frozen) {
+        hideOverlay();
       }
     } else if (msg.type === 'SET_SCROLL_LOCK') {
       if (msg.enabled) {

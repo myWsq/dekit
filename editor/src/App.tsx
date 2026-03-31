@@ -82,6 +82,8 @@ export function App() {
             page: currentPageRef.current,
           });
         }
+      } else if (msg.type === "DISMISS_CONTEXT_MENU") {
+        setContextMenu(null);
       } else if (msg.type === "DOM_TREE") {
         setDomTree(msg.tree);
       } else if (msg.type === "INSPECT_KEY") {
@@ -162,17 +164,18 @@ export function App() {
     currentPageRef.current = currentPage;
   }, [currentPage]);
 
-  // Dismiss context menu on click or iframe focus, disable iframe scroll while open
+  // Dismiss context menu on click, freeze iframe while open
   useEffect(() => {
     if (!contextMenu) return;
-    iframeRef.current?.contentWindow?.postMessage({ type: "SET_SCROLL_LOCK", enabled: true }, "*");
+    const iframeWin = iframeRef.current?.contentWindow;
+    iframeWin?.postMessage({ type: "SET_SCROLL_LOCK", enabled: true }, "*");
+    iframeWin?.postMessage({ type: "SET_FROZEN", enabled: true }, "*");
     function dismiss() { setContextMenu(null); }
     window.addEventListener("click", dismiss);
-    window.addEventListener("blur", dismiss);
     return () => {
       window.removeEventListener("click", dismiss);
-      window.removeEventListener("blur", dismiss);
-      iframeRef.current?.contentWindow?.postMessage({ type: "SET_SCROLL_LOCK", enabled: false }, "*");
+      iframeWin?.postMessage({ type: "SET_SCROLL_LOCK", enabled: false }, "*");
+      iframeWin?.postMessage({ type: "SET_FROZEN", enabled: false }, "*");
     };
   }, [contextMenu]);
 

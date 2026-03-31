@@ -76,3 +76,26 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and guidelines.
 ## License
 
 [Apache 2.0](LICENSE)
+
+## For Agents
+
+Install dekit globally:
+
+```bash
+npm install -g dekit-cli
+```
+
+Run `dekit usage` to get the full usage guide.
+
+### Skill Setup (Optional)
+
+Create a skill file for your agent (e.g. `.claude/skills/dekit.md`):
+
+```markdown
+---
+name: dekit
+description: Use dekit to create, preview, and iterate on HTML/CSS designs
+---
+Run `dekit usage` to get the full usage guide.
+Follow the guide to complete your design task.
+```

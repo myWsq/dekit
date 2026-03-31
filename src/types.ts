@@ -13,7 +13,8 @@ export interface DesignConfig {
   globalStyle: string;
   components: Record<string, ComponentDef>;
   pages: Record<string, PageDef>;
-  baseDir: string; // absolute path to directory containing design.yaml
+  baseDir: string; // absolute path to directory containing dekit.yaml
+  workDir: string; // absolute path to working directory for generated files
 }
 
 export interface PageRef {

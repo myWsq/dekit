@@ -81,7 +81,7 @@ export async function runScreenshot(config: DesignConfig, args: string[]) {
   if (height !== undefined) viewportHeight = height;
 
   // Determine output path
-  const screenshotsDir = join(config.baseDir, "screenshots");
+  const screenshotsDir = join(config.workDir, "screenshots");
   let resolvedOutputPath: string;
 
   if (outputPath) {

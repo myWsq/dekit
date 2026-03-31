@@ -60,12 +60,16 @@ export async function parseDesignConfig(
     pages[key] = { template: val.template, style: val.style };
   }
 
+  const workdir = (doc["workdir"] as string) ?? ".dekit";
+  const workDir = join(baseDir, workdir);
+
   return {
     version: doc.version as number,
     globalStyle,
     components,
     pages,
     baseDir,
+    workDir,
   };
 }
 

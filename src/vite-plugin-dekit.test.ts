@@ -29,6 +29,7 @@ const mockConfig: DesignConfig = {
     },
   },
   baseDir: DESIGN_DIR,
+  workDir: join(DESIGN_DIR, ".dekit"),
 };
 
 describe("assemblePageHtml", () => {

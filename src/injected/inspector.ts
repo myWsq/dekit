@@ -256,6 +256,21 @@ export function generateInspectorScript(): string {
     window.parent.postMessage({ type: 'NODE_SELECTED', node: info }, '*');
   }, true);
 
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    var node = e.target;
+    if (isOverlayEl(node)) return;
+    selectedNode = node;
+    var info = getNodeInfo(node);
+    var rect = node.getBoundingClientRect();
+    window.parent.postMessage({
+      type: 'CONTEXT_MENU',
+      node: info,
+      x: e.clientX,
+      y: e.clientY
+    }, '*');
+  }, true);
+
   document.addEventListener('mouseover', function(e) {
     if (!inspectEnabled) return;
     const node = e.target;
@@ -317,6 +332,12 @@ export function generateInspectorScript(): string {
         }
       } else {
         if (touchStyle) touchStyle.remove();
+      }
+    } else if (msg.type === 'SET_SCROLL_LOCK') {
+      if (msg.enabled) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
       }
     } else if (msg.type === 'SET_INSPECT_MODE') {
       inspectEnabled = !!msg.enabled;

@@ -67,6 +67,21 @@ export function App() {
       if (msg.type === "NODE_SELECTED") {
         setSelectedNode(msg.node);
         setSelectedPath(msg.node.path);
+      } else if (msg.type === "CONTEXT_MENU") {
+        setSelectedNode(msg.node);
+        setSelectedPath(msg.node.path);
+        // Convert iframe-local coordinates to editor coordinates
+        const iframe = iframeRef.current;
+        if (iframe) {
+          const iframeRect = iframe.getBoundingClientRect();
+          const sf = scaleFactor;
+          setContextMenu({
+            x: iframeRect.left + msg.x * sf,
+            y: iframeRect.top + msg.y * sf,
+            cssSelector: msg.node.cssSelector,
+            page: currentPageRef.current,
+          });
+        }
       } else if (msg.type === "DOM_TREE") {
         setDomTree(msg.tree);
       } else if (msg.type === "INSPECT_KEY") {
@@ -147,15 +162,17 @@ export function App() {
     currentPageRef.current = currentPage;
   }, [currentPage]);
 
-  // Dismiss context menu on click or iframe focus
+  // Dismiss context menu on click or iframe focus, disable iframe scroll while open
   useEffect(() => {
     if (!contextMenu) return;
+    iframeRef.current?.contentWindow?.postMessage({ type: "SET_SCROLL_LOCK", enabled: true }, "*");
     function dismiss() { setContextMenu(null); }
     window.addEventListener("click", dismiss);
     window.addEventListener("blur", dismiss);
     return () => {
       window.removeEventListener("click", dismiss);
       window.removeEventListener("blur", dismiss);
+      iframeRef.current?.contentWindow?.postMessage({ type: "SET_SCROLL_LOCK", enabled: false }, "*");
     };
   }, [contextMenu]);
 

@@ -1,5 +1,5 @@
 {
-  "name": "dekit",
+  "name": "dekit-cli",
   "version": "0.1.0",
   "type": "module",
   "description": "A code-first design toolkit — preview, inspect, and debug your HTML/CSS designs in the browser",

@@ -1,4 +1,3 @@
-#!/usr/bin/env tsx
 import { resolve } from "node:path";
 import { existsSync } from "node:fs";
 import { parseDesignConfig } from "../src/parser.js";

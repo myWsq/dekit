@@ -16,7 +16,7 @@ A code-first design toolkit — preview, inspect, and debug your HTML/CSS design
 Install globally:
 
 ```bash
-npm install -g dekit
+npm install -g dekit-cli
 ```
 
 Create a `design.yaml` in your project:

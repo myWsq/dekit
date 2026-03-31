@@ -36,7 +36,9 @@ Run `dekit usage` to get the full usage guide.
 Follow the guide to complete your design task.
 ```
 
-### 3. Ask the agent to design
+## Examples
+
+**Let the agent design from scratch:**
 
 ```
 > Use dekit to design a landing page for a task management app
@@ -44,17 +46,25 @@ Follow the guide to complete your design task.
 
 The agent handles everything — project setup, writing HTML/CSS, taking screenshots to verify, and iterating on the design.
 
-### 4. Review
+**Review and give feedback:**
 
-When the agent is done, it starts the preview server. Open the browser to review.
-
-If something needs changing, right-click any element and **Copy Ref**, then tell the agent:
+When the agent starts the preview server, open the browser to review. Right-click any element and **Copy Ref**, then tell the agent what to change:
 
 ```
 > The hero section $${home@.hero} needs more padding, and make the CTA button blue
 ```
 
-The agent knows how to resolve refs to source code and make the changes.
+**Add a page to an existing design:**
+
+```
+> Add a pricing page to the dekit project with a 3-tier card layout
+```
+
+**Design for mobile:**
+
+```
+> Use dekit to design a mobile app for a fitness tracker, use the mobile template
+```
 
 ## License
 

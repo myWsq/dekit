@@ -109,7 +109,8 @@ body {
 }
 
 .page-item.active {
-  background: #2a2d2e;
+  background: #333639;
+  color: #e0e0e0;
 }
 
 .page-list.focused .page-item.active {
@@ -148,7 +149,8 @@ body {
 }
 
 .layer-node.selected {
-  background: #2a2d2e;
+  background: #333639;
+  color: #e0e0e0;
 }
 
 .layer-tree.focused .layer-node.selected {

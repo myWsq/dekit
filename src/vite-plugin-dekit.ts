@@ -34,6 +34,7 @@ export async function assemblePageHtml(
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="/@vite/client"></script>
   <link rel="stylesheet" href="/@design/${config.globalStyle}">
   <link rel="stylesheet" href="/@design/${pageDef.style}">
 </head>

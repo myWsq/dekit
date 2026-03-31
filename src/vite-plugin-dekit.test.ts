@@ -3,7 +3,7 @@ import { assemblePageHtml } from "./vite-plugin-dekit.js";
 import type { DesignConfig } from "./types.js";
 import { join } from "node:path";
 
-const DESIGN_DIR = join(import.meta.dirname, "../example");
+const DESIGN_DIR = join(import.meta.dirname, "../example/.dekit");
 
 const mockConfig: DesignConfig = {
   version: 1.0,
@@ -29,7 +29,6 @@ const mockConfig: DesignConfig = {
     },
   },
   baseDir: DESIGN_DIR,
-  workDir: join(DESIGN_DIR, ".dekit"),
 };
 
 describe("assemblePageHtml", () => {

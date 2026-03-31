@@ -15,39 +15,37 @@ afterEach(() => {
 });
 
 describe("runInit", () => {
-  test("creates blank project in target directory", async () => {
-    const target = join(tempDir, "my-design");
-    await runInit([target]);
+  test("creates blank project in .dekit/ under target directory", async () => {
+    await runInit([tempDir]);
 
-    expect(existsSync(join(target, "dekit.yaml"))).toBe(true);
-    expect(existsSync(join(target, "global.css"))).toBe(true);
-    expect(existsSync(join(target, "pages/home/home.html"))).toBe(true);
-    expect(existsSync(join(target, "pages/home/home.css"))).toBe(true);
+    const dekitDir = join(tempDir, ".dekit");
+    expect(existsSync(join(dekitDir, "dekit.yaml"))).toBe(true);
+    expect(existsSync(join(dekitDir, "global.css"))).toBe(true);
+    expect(existsSync(join(dekitDir, "pages/home/home.html"))).toBe(true);
+    expect(existsSync(join(dekitDir, "pages/home/home.css"))).toBe(true);
   });
 
-  test("creates blank project in current directory when no path given", async () => {
+  test("creates project in .dekit/ under current directory when no path given", async () => {
     const origCwd = process.cwd();
     process.chdir(tempDir);
     try {
       await runInit([]);
-      expect(existsSync(join(tempDir, "dekit.yaml"))).toBe(true);
+      expect(existsSync(join(tempDir, ".dekit/dekit.yaml"))).toBe(true);
     } finally {
       process.chdir(origCwd);
     }
   });
 
   test("creates landing template when specified", async () => {
-    const target = join(tempDir, "landing");
-    await runInit([target, "--template", "landing"]);
+    await runInit([tempDir, "--template", "landing"]);
 
-    const html = readFileSync(join(target, "pages/home/home.html"), "utf-8");
+    const html = readFileSync(join(tempDir, ".dekit/pages/home/home.html"), "utf-8");
     expect(html).toContain("hero");
   });
 
-  test("refuses to init in directory with existing dekit.yaml", async () => {
-    const target = join(tempDir, "existing");
-    await runInit([target]);
-    await expect(runInit([target])).rejects.toThrow(/already exists/i);
+  test("refuses to init when .dekit/dekit.yaml already exists", async () => {
+    await runInit([tempDir]);
+    await expect(runInit([tempDir])).rejects.toThrow(/already exists/i);
   });
 
   test("lists templates when --template given without value", async () => {

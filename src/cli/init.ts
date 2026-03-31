@@ -30,8 +30,10 @@ export async function runInit(args: string[]) {
     );
   }
 
-  if (existsSync(join(targetDir, "dekit.yaml"))) {
-    throw new Error(`dekit.yaml already exists in ${targetDir}`);
+  const dekitDir = join(targetDir, ".dekit");
+
+  if (existsSync(join(dekitDir, "dekit.yaml"))) {
+    throw new Error(`dekit.yaml already exists in ${dekitDir}`);
   }
 
   const templateDir = join(TEMPLATES_DIR, template);
@@ -39,8 +41,8 @@ export async function runInit(args: string[]) {
     throw new Error(`Template directory not found: ${templateDir}`);
   }
 
-  mkdirSync(targetDir, { recursive: true });
-  cpSync(templateDir, targetDir, { recursive: true });
+  mkdirSync(dekitDir, { recursive: true });
+  cpSync(templateDir, dekitDir, { recursive: true });
 
-  console.log(`Created dekit project in ${targetDir} (template: ${template})`);
+  console.log(`Created dekit project in ${dekitDir} (template: ${template})`);
 }

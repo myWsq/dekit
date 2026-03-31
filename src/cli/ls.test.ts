@@ -19,7 +19,7 @@ afterEach(() => {
 
 describe("runLs", () => {
   test("lists pages", async () => {
-    const config = await parseDesignConfig(join(tempDir, "dekit.yaml"));
+    const config = await parseDesignConfig(join(tempDir, ".dekit/dekit.yaml"));
     const spy = vi.spyOn(console, "log");
     await runLs(config);
     const output = spy.mock.calls.map((c) => c[0]).join("\n");

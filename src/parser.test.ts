@@ -2,7 +2,7 @@ import { describe, test, expect } from "vitest";
 import { parseDesignConfig } from "./parser.js";
 import { join } from "node:path";
 
-const DESIGN_DIR = join(import.meta.dirname, "../example");
+const DESIGN_DIR = join(import.meta.dirname, "../example/.dekit");
 
 describe("parseDesignConfig", () => {
   test("parses valid dekit.yaml", async () => {

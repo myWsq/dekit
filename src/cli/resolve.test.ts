@@ -19,7 +19,7 @@ afterEach(() => {
 
 describe("runResolve", () => {
   test("resolves page ref to file path", async () => {
-    const config = await parseDesignConfig(join(tempDir, "dekit.yaml"));
+    const config = await parseDesignConfig(join(tempDir, ".dekit/dekit.yaml"));
     const spy = vi.spyOn(console, "log");
     await runResolve(config, ["$${home}"]);
     expect(spy.mock.calls[0][0]).toContain("pages/home/home.html");
@@ -27,7 +27,7 @@ describe("runResolve", () => {
   });
 
   test("resolves element ref to file path with line range", async () => {
-    const config = await parseDesignConfig(join(tempDir, "dekit.yaml"));
+    const config = await parseDesignConfig(join(tempDir, ".dekit/dekit.yaml"));
     const spy = vi.spyOn(console, "log");
     await runResolve(config, ["$${home@.hero}"]);
     const output = spy.mock.calls[0][0] as string;
@@ -37,7 +37,7 @@ describe("runResolve", () => {
   });
 
   test("rejects unknown page", async () => {
-    const config = await parseDesignConfig(join(tempDir, "dekit.yaml"));
+    const config = await parseDesignConfig(join(tempDir, ".dekit/dekit.yaml"));
     await expect(runResolve(config, ["$${nonexistent}"])).rejects.toThrow(/not found/i);
   });
 });

@@ -26,7 +26,12 @@ Run 'dekit <command> --help' for command-specific help.
 }
 
 function findDefaultConfig(): string | undefined {
-  for (const name of ["dekit.yaml", "dekit.yml", "design.yaml", "design.yml"]) {
+  for (const name of [
+    ".dekit/dekit.yaml",
+    ".dekit/dekit.yml",
+    "dekit.yaml",
+    "dekit.yml",
+  ]) {
     const p = resolve(name);
     if (existsSync(p)) return p;
   }
@@ -57,7 +62,7 @@ async function loadConfig(configArg?: string) {
   const configPath = configArg ? resolve(configArg) : findDefaultConfig();
   if (!configPath) {
     console.error(
-      "Error: no dekit.yaml found in current directory. Use -c to specify a config file.\n"
+      "Error: no .dekit/dekit.yaml found. Run 'dekit init' or use -c to specify a config file.\n"
     );
     process.exit(1);
   }

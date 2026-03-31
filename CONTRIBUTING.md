@@ -6,7 +6,7 @@ Thanks for your interest in contributing! Here's how to get started.
 
 ```bash
 # Clone the repo
-git clone https://github.com/user/dekit.git
+git clone https://github.com/myWsq/dekit.git
 cd dekit
 
 # Install dependencies

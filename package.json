@@ -5,9 +5,9 @@
   "description": "A code-first design toolkit — preview, inspect, and debug your HTML/CSS designs in the browser",
   "keywords": ["design", "devtools", "inspector", "preview", "css", "html", "cli"],
   "license": "Apache-2.0",
-  "repository": { "type": "git", "url": "https://github.com/user/dekit" },
-  "homepage": "https://github.com/user/dekit",
-  "bugs": { "url": "https://github.com/user/dekit/issues" },
+  "repository": { "type": "git", "url": "https://github.com/myWsq/dekit" },
+  "homepage": "https://github.com/myWsq/dekit",
+  "bugs": { "url": "https://github.com/myWsq/dekit/issues" },
   "files": ["bin/", "src/", "editor/", "dist/"],
   "engines": { "node": ">=18" },
   "bin": {

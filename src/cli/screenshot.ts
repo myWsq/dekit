@@ -19,6 +19,7 @@ function parseArgs(args: string[]): {
   width?: number;
   height?: number;
   fullPage: boolean;
+  props: Record<string, string>;
 } {
   let ref: string | undefined;
   let outputPath: string | undefined;
@@ -26,6 +27,7 @@ function parseArgs(args: string[]): {
   let width: number | undefined;
   let height: number | undefined;
   let fullPage = false;
+  const props: Record<string, string> = {};
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -39,6 +41,13 @@ function parseArgs(args: string[]): {
       height = parseInt(args[++i], 10);
     } else if (arg === "--full-page") {
       fullPage = true;
+    } else if (arg === "--props") {
+      const kv = args[++i];
+      const eqIdx = kv.indexOf("=");
+      if (eqIdx === -1) {
+        throw new Error(`Invalid --props format: "${kv}". Expected key=value`);
+      }
+      props[kv.slice(0, eqIdx)] = kv.slice(eqIdx + 1);
     } else if (!arg.startsWith("-")) {
       ref = arg;
     }
@@ -48,19 +57,19 @@ function parseArgs(args: string[]): {
     throw new Error("Missing ref argument. Expected format: $${page} or $${page@selector}");
   }
 
-  return { ref, outputPath, deviceName, width, height, fullPage };
+  return { ref, outputPath, deviceName, width, height, fullPage, props };
 }
 
 export async function runScreenshot(config: DesignConfig, args: string[]) {
-  const { ref, outputPath, deviceName, width, height, fullPage } = parseArgs(args);
+  const { ref, outputPath, deviceName, width, height, fullPage, props } = parseArgs(args);
 
   // Parse and validate the ref (throws on invalid format)
   const parsedRef = parseRef(ref);
 
-  // Resolve viewport from --device or --width/--height flags
-  let viewportWidth = 1280;
-  let viewportHeight = 800;
-  let devicePixelRatio = 1;
+  // Resolve viewport from --device or --width/--height flags, falling back to config.device
+  let viewportWidth = config.device?.width ?? 1280;
+  let viewportHeight = config.device?.height ?? 800;
+  let devicePixelRatio = config.device?.dpr ?? 1;
 
   if (deviceName) {
     const normalizedInput = deviceName.toLowerCase().replace(/\s+/g, "-");
@@ -131,7 +140,12 @@ export async function runScreenshot(config: DesignConfig, args: string[]) {
     });
 
     const pageKey = parsedRef.pageKey;
-    const url = `http://localhost:${port}/page/${pageKey}?noinspector`;
+    const urlObj = new URL(`http://localhost:${port}/page/${pageKey}`);
+    urlObj.searchParams.set("noinspector", "");
+    for (const [key, value] of Object.entries(props)) {
+      urlObj.searchParams.set(`props.${key}`, value);
+    }
+    const url = urlObj.toString();
     await page.goto(url, { waitUntil: "networkidle0" });
 
     if (parsedRef.type === "element") {

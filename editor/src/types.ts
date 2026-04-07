@@ -14,10 +14,18 @@ export interface DOMTreeNode {
   children: DOMTreeNode[];
 }
 
+export interface DeviceConfig {
+  width: number;
+  height: number;
+  dpr: number;
+  name?: string;
+}
+
 export interface EditorConfig {
   pages: string[];
   pagePaths: Record<string, string>;
   components: string[];
+  device: DeviceConfig | null;
   designServerUrl: string;
 }
 

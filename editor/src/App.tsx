@@ -56,6 +56,14 @@ export function App() {
         if (data.pages.length > 0) {
           setCurrentPage(data.pages[0]);
         }
+        if (data.device) {
+          const preset = DEVICE_PRESETS.find(
+            (d) => d.name === data.device!.name
+          );
+          setDeviceMode(preset ? preset.name : "custom");
+          setDeviceWidth(data.device.width);
+          setDeviceHeight(data.device.height);
+        }
       });
   }, []);
 

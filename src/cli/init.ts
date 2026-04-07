@@ -1,5 +1,6 @@
-import { existsSync, mkdirSync, cpSync } from "node:fs";
+import { existsSync, mkdirSync, cpSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve, join } from "node:path";
+import yaml from "js-yaml";
 
 const TEMPLATES_DIR = join(import.meta.dirname, "../../templates/projects");
 
@@ -8,6 +9,7 @@ const AVAILABLE_TEMPLATES = ["blank", "landing", "dashboard", "mobile"];
 export async function runInit(args: string[]) {
   let targetDir = process.cwd();
   let template = "blank";
+  let deviceArg: string | undefined;
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -19,6 +21,8 @@ export async function runInit(args: string[]) {
       }
       template = next;
       i++;
+    } else if (arg === "--device") {
+      deviceArg = args[++i];
     } else if (!arg.startsWith("-")) {
       targetDir = resolve(arg);
     }
@@ -43,6 +47,13 @@ export async function runInit(args: string[]) {
 
   mkdirSync(dekitDir, { recursive: true });
   cpSync(templateDir, dekitDir, { recursive: true });
+
+  if (deviceArg) {
+    const yamlPath = join(dekitDir, "dekit.yaml");
+    const doc = yaml.load(readFileSync(yamlPath, "utf-8")) as Record<string, unknown>;
+    doc.device = deviceArg;
+    writeFileSync(yamlPath, yaml.dump(doc, { quotingType: '"', forceQuotes: false }));
+  }
 
   console.log(`Created dekit project in ${dekitDir} (template: ${template})`);
 }

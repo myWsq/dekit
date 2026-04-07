@@ -20,10 +20,18 @@ export async function startEditorServer(
       for (const [name, def] of Object.entries(config.pages)) {
         pagePaths[name] = join(config.baseDir, def.template);
       }
+      const pageProperties: Record<string, Record<string, { type: string; default: unknown }>> = {};
+      for (const [name, def] of Object.entries(config.pages)) {
+        if (def.properties) {
+          pageProperties[name] = def.properties;
+        }
+      }
       const payload = {
         pages: Object.keys(config.pages),
         pagePaths,
+        pageProperties,
         components: Object.keys(config.components),
+        device: config.device ?? null,
         designServerUrl: `http://localhost:${designPort}`,
       };
       res.setHeader("Content-Type", "application/json");

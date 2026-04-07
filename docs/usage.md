@@ -132,6 +132,7 @@ Every page and component must be registered:
 
 ```yaml
 version: 1.0
+device: "iPhone 16"
 global-style: "global.css"
 
 components:
@@ -143,12 +144,57 @@ pages:
   home:
     template: "pages/home/home.html"
     style: "pages/home/home.css"
+    properties:
+      showBanner:
+        type: boolean
+        default: true
+      itemCount:
+        type: number
+        default: 3
   about:
     template: "pages/about/about.html"
     style: "pages/about/about.css"
 ```
 
 All paths are relative to the `.dekit/` directory.
+
+### device
+
+Sets the target device for the project. Affects screenshot default viewport and editor initial device.
+
+Accepts a preset name (e.g. `"iPhone 16"`, `"iPad Air"`, `"Desktop 1440"`) or custom dimensions:
+
+```yaml
+device:
+  width: 400
+  height: 800
+  dpr: 2
+```
+
+When omitted, screenshots default to 1280×800.
+
+### Page Properties
+
+Pages can declare properties — typed parameters with defaults. Properties are injected as `window.__DEKIT_PROPS__` in the page, so your HTML/JS can read them to control rendering.
+
+**Supported types:** `boolean`, `number`, `string`.
+
+**Using properties in page HTML:**
+```html
+<section class="banner">...</section>
+<script>
+  if (!window.__DEKIT_PROPS__.showBanner) {
+    document.querySelector('.banner').remove();
+  }
+</script>
+```
+
+**Override properties in screenshots** with `--props`:
+```bash
+dekit screenshot '$${home}' --props showBanner=false --props itemCount=5
+```
+
+Values are converted based on the declared type (not guessed). Unspecified props use their default.
 
 ## CLI Reference
 
@@ -162,6 +208,7 @@ Templates: `blank`, `landing`, `dashboard`, `mobile`.
 dekit init                           # .dekit/ in current directory
 dekit init my-project                # my-project/.dekit/
 dekit init --template landing        # With template
+dekit init --template mobile --device "iPhone 16"  # With device
 dekit init --template                # List available templates
 ```
 
@@ -202,6 +249,7 @@ dekit screenshot '$${home@.hero}'              # Element only
 dekit screenshot '$${home}' --device iphone-14 # Device size
 dekit screenshot '$${home}' --full-page        # Include scroll area
 dekit screenshot '$${home}' -o output.png      # Custom output path
+dekit screenshot '$${home}' --props showBanner=false --props itemCount=5  # Override properties
 dekit screenshot --all                         # All pages
 ```
 
@@ -231,19 +279,160 @@ When you see a `$${...}` pattern in user messages:
 
 You don't need to parse refs yourself — just pass them to the CLI.
 
+## Best Practices
+
+### 1. Start with DESIGN.md
+
+Before writing any HTML/CSS, read `.dekit/DESIGN.md`. This is the design system source of truth for the project.
+
+- **If DESIGN.md exists** — read it and follow the design specifications (colors, typography, components, spacing) when building pages.
+- **If DESIGN.md does not exist** — generate one based on the current design task requirements before writing any code. Infer the visual style, color palette, and layout rules from the user's request, then write `.dekit/DESIGN.md`.
+- **If the user's request conflicts with DESIGN.md** — update DESIGN.md first to reflect the new requirements, then implement the changes. DESIGN.md is always the single source of truth; code follows the spec, not the other way around.
+
+The recommended sections:
+
+```markdown
+# DESIGN.md
+
+## 1. Visual Theme & Atmosphere
+Clean, minimal SaaS aesthetic with generous white space. Light and airy,
+professional but approachable. Rounded geometry, subtle shadows, no hard borders.
+
+## 2. Color Palette & Roles
+- **Royal Blue** (`#2563eb`): Primary brand, CTA backgrounds, active states
+- **Amber** (`#f59e0b`): Accent, highlights, badges
+- **Slate 900** (`#0f172a`): Headings, primary text
+- **Slate 500** (`#64748b`): Body text, descriptions
+- **Slate 100** (`#f1f5f9`): Surface backgrounds, cards
+- **White** (`#ffffff`): Page background
+- **Red 500** (`#ef4444`): Error states, destructive actions
+- **Green 500** (`#22c55e`): Success states, confirmations
+
+## 3. Typography Rules
+- Font: system-ui, -apple-system, sans-serif
+- Headings: weight 700, tight line-height (1.1-1.2)
+- Body: weight 400, relaxed line-height (1.5-1.6), 16px base
+- Small/labels: weight 500, 12-14px, uppercase tracking for overlines
+
+## 4. Component Stylings
+- **Buttons**: 8px radius, 12px 24px padding. Primary: blue bg + white text.
+  Outline: transparent bg + blue border + blue text. Hover darkens 10%.
+- **Cards**: white bg, 12px radius, 1px solid #e2e8f0 border,
+  shadow 0 1px 3px rgba(0,0,0,0.1). No header stripe.
+- **Inputs**: 8px radius, 1px #d1d5db border, 10px 14px padding.
+  Focus: blue border + blue ring shadow.
+
+## 5. Layout & Spacing Principles
+- 4px base grid. Spacing scale: 4, 8, 16, 24, 32, 48, 64, 96.
+- Page max-width: 1200px, centered.
+- Section vertical padding: 64-96px.
+- Card grid: 16-24px gap.
+
+## 6. Pages
+- **home** — hero with CTA, features grid (3 cols), pricing cards, footer
+- **dashboard** — sidebar nav, stats bar, task list with filters
+```
+
+Write DESIGN.md first, then derive `global.css` tokens from it. Update the document as the design evolves.
+
+### 2. Derive global.css from DESIGN.md
+
+Translate the colors, typography, and spacing from DESIGN.md into CSS custom properties in `global.css`:
+
+```css
+:root {
+  /* From §2 Color Palette */
+  --color-primary: #2563eb;
+  --color-accent: #f59e0b;
+  --color-text: #0f172a;
+  --color-muted: #64748b;
+  --color-bg: #ffffff;
+  --color-surface: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-error: #ef4444;
+  --color-success: #22c55e;
+
+  /* From §4 Component Stylings */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* From §5 Layout & Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 48px;
+}
+```
+
+Pages should reference these variables (`var(--color-primary)`) instead of hardcoding values. This ensures consistency and makes global changes a single-file edit.
+
+### 3. Build section by section, screenshot after each
+
+Don't write an entire page before checking the result. Build incrementally:
+
+```
+1. Write the hero section HTML + CSS
+2. dekit screenshot '$${home@.hero}'     # Verify just the hero
+3. Write the features grid
+4. dekit screenshot '$${home}'           # Verify overall layout
+5. Continue section by section
+```
+
+Catching issues early avoids cascading problems. A broken layout in the hero affects everything below it.
+
+### 4. Use properties for state variants
+
+When a page has multiple states (empty, loading, error, different data counts), use properties instead of duplicating pages:
+
+```yaml
+pages:
+  dashboard:
+    template: pages/dashboard/dashboard.html
+    style: pages/dashboard/dashboard.css
+    properties:
+      taskCount:
+        type: number
+        default: 5
+      showEmptyState:
+        type: boolean
+        default: false
+```
+
+Then screenshot each variant:
+
+```bash
+dekit screenshot '$${dashboard}'                              # Normal state
+dekit screenshot '$${dashboard}' --props showEmptyState=true  # Empty state
+dekit screenshot '$${dashboard}' --props taskCount=0          # Zero items
+dekit screenshot '$${dashboard}' --props taskCount=100        # Many items
+```
+
+### 5. Extract repeated patterns into components
+
+When you see the same HTML structure appear twice or more, extract it into a Web Component:
+
+```bash
+dekit add component ui-card
+```
+
+Move the shared markup into the component's `<template>` with `<slot>` for variable content. This keeps pages DRY and makes global updates to the pattern a single-file change.
+
 ## Design Workflow
 
 ### Self-directed design loop
 
 ```
 1. dekit init --template landing          # Start project
-2. Edit .dekit/pages/home/home.html       # Write HTML
-3. Edit .dekit/pages/home/home.css        # Write CSS
-4. dekit screenshot '$${home}'            # Take screenshot
-5. Read the screenshot file               # Analyze the result
-6. Edit HTML/CSS to fix issues            # Iterate
-7. Repeat 4-6 until satisfied             # Keep improving
-8. dekit serve                            # Let human review
+2. Read .dekit/DESIGN.md or generate one  # Design system first
+3. Derive design tokens in global.css     # From DESIGN.md
+4. Build page section by section          # Incremental progress
+5. dekit screenshot '$${home}'            # Verify after each section
+6. Read the screenshot, iterate           # Fix issues early
+7. Extract components when patterns repeat
+8. Screenshot all property variants       # Cover edge cases
+9. dekit serve                            # Let human review
 ```
 
 ### Human feedback loop

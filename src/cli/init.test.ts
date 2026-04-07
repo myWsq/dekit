@@ -48,6 +48,28 @@ describe("runInit", () => {
     await expect(runInit([tempDir])).rejects.toThrow(/already exists/i);
   });
 
+  test("mobile template includes device by default", async () => {
+    await runInit([tempDir, "--template", "mobile"]);
+
+    const content = readFileSync(join(tempDir, ".dekit/dekit.yaml"), "utf-8");
+    expect(content).toContain("iPhone 16");
+  });
+
+  test("--device flag writes device to dekit.yaml", async () => {
+    await runInit([tempDir, "--device", "iPad Air"]);
+
+    const content = readFileSync(join(tempDir, ".dekit/dekit.yaml"), "utf-8");
+    expect(content).toContain("iPad Air");
+  });
+
+  test("--device flag overrides template default device", async () => {
+    await runInit([tempDir, "--template", "mobile", "--device", "Pixel 8"]);
+
+    const content = readFileSync(join(tempDir, ".dekit/dekit.yaml"), "utf-8");
+    expect(content).toContain("Pixel 8");
+    expect(content).not.toContain("iPhone 16");
+  });
+
   test("lists templates when --template given without value", async () => {
     const consoleSpy = vi.spyOn(console, "log");
     await runInit(["--template"]);

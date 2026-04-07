@@ -21,9 +21,15 @@ export interface DeviceConfig {
   name?: string;
 }
 
+export interface PropertyDef {
+  type: "boolean" | "number" | "string";
+  default: unknown;
+}
+
 export interface EditorConfig {
   pages: string[];
   pagePaths: Record<string, string>;
+  pageProperties: Record<string, Record<string, PropertyDef>>;
   components: string[];
   device: DeviceConfig | null;
   designServerUrl: string;

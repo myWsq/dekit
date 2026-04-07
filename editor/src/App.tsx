@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import type { EditorConfig, NodeInfo, DOMTreeNode, IframeMessage } from "./types.js";
+import type { EditorConfig, NodeInfo, DOMTreeNode, IframeMessage, PropertyDef } from "./types.js";
 import { DEVICE_PRESETS, calcScale } from "./devices.js";
 import type { DevicePreset } from "./types.js";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
@@ -26,8 +26,8 @@ export function App() {
   const [deviceWidth, setDeviceWidth] = useState(0);
   const [deviceHeight, setDeviceHeight] = useState(0);
   const [zoomMode, setZoomMode] = useState<"fit" | number>("fit");
-  const [inspectMode, setInspectMode] = useState(false);
-  const [inspectLocked, setInspectLocked] = useState(false);
+  const [inspectMode, setInspectMode] = useState(true);
+  const [inspectLocked, setInspectLocked] = useState(true);
   const inspectModeRef = useRef(false);
   const altPressedRef = useRef(false);
   const currentPageRef = useRef("");
@@ -35,6 +35,7 @@ export function App() {
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; cssSelector?: string; page: string } | null>(null);
   const [focusedPanel, setFocusedPanel] = useState<"pages" | "layers" | null>(null);
+  const [propsOverrides, setPropsOverrides] = useState<Record<string, Record<string, string>>>({});
 
   const configRef = useRef<EditorConfig | null>(null);
   configRef.current = config;
@@ -236,9 +237,19 @@ export function App() {
     return <div className="empty-state">Loading...</div>;
   }
 
-  const iframeSrc = currentPage
-    ? `${config.designServerUrl}/page/${currentPage}`
-    : "";
+  const currentOverrides = currentPage ? propsOverrides[currentPage] : undefined;
+  let iframeSrc = "";
+  if (currentPage) {
+    const base = `${config.designServerUrl}/page/${currentPage}`;
+    const params = new URLSearchParams();
+    if (currentOverrides) {
+      for (const [key, value] of Object.entries(currentOverrides)) {
+        params.set(`props.${key}`, value);
+      }
+    }
+    const qs = params.toString();
+    iframeSrc = qs ? `${base}?${qs}` : base;
+  }
 
   return (
     <div className="editor-layout">
@@ -357,6 +368,30 @@ export function App() {
 
       {/* Right Panel */}
       <div className="right-panel">
+        {currentPage && config.pageProperties[currentPage] && Object.keys(config.pageProperties[currentPage]).length > 0 && (
+          <div className="right-panel-props">
+            <div className="panel-header">Page Props</div>
+            <OverlayScrollbarsComponent className="props-panel-scroll" defer>
+              <PagePropsPanel
+                properties={config.pageProperties[currentPage]}
+                overrides={propsOverrides[currentPage] ?? {}}
+                onChange={(key, value) => {
+                  setPropsOverrides((prev) => ({
+                    ...prev,
+                    [currentPage]: { ...prev[currentPage], [key]: value },
+                  }));
+                }}
+                onReset={() => {
+                  setPropsOverrides((prev) => {
+                    const next = { ...prev };
+                    delete next[currentPage];
+                    return next;
+                  });
+                }}
+              />
+            </OverlayScrollbarsComponent>
+          </div>
+        )}
         <div className="right-panel-top">
           <div className="panel-header">Layers</div>
           <OverlayScrollbarsComponent className="layer-tree-scroll" defer>
@@ -741,5 +776,86 @@ function PropertyPanel({ node, nodeRef }: { node: NodeInfo; nodeRef: string }) {
       {renderStyleGroup("Visual", visualStyles)}
       {renderStyleGroup("Typography", textStyles)}
     </>
+  );
+}
+
+function PagePropsPanel({
+  properties,
+  overrides,
+  onChange,
+  onReset,
+}: {
+  properties: Record<string, PropertyDef>;
+  overrides: Record<string, string>;
+  onChange: (key: string, value: string) => void;
+  onReset: () => void;
+}) {
+  const hasOverrides = Object.keys(overrides).length > 0;
+
+  return (
+    <div className="page-props-panel">
+      {Object.entries(properties).map(([key, def]) => {
+        const overridden = key in overrides;
+        const currentValue = overridden ? overrides[key] : String(def.default);
+
+        return (
+          <div key={key} className="property-row">
+            <span className="property-key">{key}</span>
+            {def.type === "boolean" ? (
+              <input
+                type="checkbox"
+                className="props-checkbox"
+                checked={currentValue === "true"}
+                onChange={(e) => onChange(key, String(e.target.checked))}
+              />
+            ) : (
+              <PropInput
+                type={def.type}
+                value={currentValue}
+                onChange={(v) => onChange(key, v)}
+              />
+            )}
+          </div>
+        );
+      })}
+      {hasOverrides && (
+        <button className="props-reset-btn" onClick={onReset}>
+          Reset
+        </button>
+      )}
+    </div>
+  );
+}
+
+function PropInput({
+  type,
+  value,
+  onChange,
+}: {
+  type: "number" | "string";
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const [draft, setDraft] = useState(value);
+
+  useEffect(() => {
+    setDraft(value);
+  }, [value]);
+
+  const commit = () => {
+    if (draft !== value) onChange(draft);
+  };
+
+  return (
+    <input
+      className="props-input"
+      type={type === "number" ? "number" : "text"}
+      value={draft}
+      onChange={(e) => setDraft(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+      }}
+    />
   );
 }

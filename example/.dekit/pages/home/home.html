@@ -70,6 +70,24 @@
   </div>
 </section>
 
+<script>
+  (function() {
+    var p = window.__DEKIT_PROPS__ || {};
+    if (p.showPricing === false) {
+      var el = document.querySelector('.pricing');
+      if (el) el.style.display = 'none';
+    }
+    if (p.heroTitle) {
+      var h1 = document.querySelector('.hero__title');
+      if (h1) h1.textContent = p.heroTitle;
+    }
+    if (p.featureColumns) {
+      var grid = document.querySelector('.features__grid');
+      if (grid) grid.style.gridTemplateColumns = 'repeat(' + p.featureColumns + ', 1fr)';
+    }
+  })();
+</script>
+
 <!-- Footer -->
 <footer class="footer">
   <div class="footer__inner">

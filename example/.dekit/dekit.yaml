@@ -13,6 +13,16 @@ pages:
   home:
     template: "pages/home/home.html"
     style: "pages/home/home.css"
+    properties:
+      showPricing:
+        type: boolean
+        default: true
+      heroTitle:
+        type: string
+        default: "Build something amazing"
+      featureColumns:
+        type: number
+        default: 3
   showcase:
     template: "pages/showcase/showcase.html"
     style: "pages/showcase/showcase.css"

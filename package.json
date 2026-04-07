@@ -1,6 +1,6 @@
 {
   "name": "dekit-cli",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "type": "module",
   "description": "A code-first design toolkit for agents and humans — create, preview, and screenshot HTML/CSS designs",
   "keywords": [
